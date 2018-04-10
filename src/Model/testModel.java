@@ -1,5 +1,4 @@
 package Model;
-
 import Model.Plateau.Case;
 import Model.Plateau.Grille;
 import Model.Plateau.Piece;
@@ -29,8 +28,8 @@ public class testModel {
     public static void testPiece(){
         System.out.println("Test pièce");
         int[][] dispo1 = new int[][]{
-                {0,1},
-                {0,1}
+                {1,1,0},
+                {0,1,1}
         };
         Piece p = new Piece(dispo1);
         p.afficherDisposition();

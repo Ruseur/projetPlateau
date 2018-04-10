@@ -1,4 +1,4 @@
-package Model.Jeu;
+package Model.Joueur;
 
 public class Joueur {
 }
