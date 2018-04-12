@@ -98,6 +98,8 @@ dist/
 nbdist/
 .nb-gradle/
 nbactions.xml
-
+nbproject/
 
 # End of https://www.gitignore.io/api/java,netbeans,intellij
+/build.xml
+/manifest.mf
