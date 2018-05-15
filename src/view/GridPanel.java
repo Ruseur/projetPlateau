@@ -19,9 +19,9 @@ import javafx.scene.shape.Rectangle;
  *
  * @author vvhuan
  */
-public class PanelPrincipal extends GridPane implements Observer{
+public class gridPanel extends GridPane implements Observer{
     
-    public PanelPrincipal(Grille grille, Controleur controleur){
+    public gridPanel(Grille grille, Controleur controleur){
         for (int i=0; i<grille.getLargeur(); i++)
            for (int j=0; j<grille.getHauteur(); j++){
                Rectangle rec = new Rectangle();
