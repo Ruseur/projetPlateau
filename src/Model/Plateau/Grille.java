@@ -23,6 +23,14 @@ public class Grille {
         return grilleCase;
     }
 
+    public Case getCase(int y, int x){
+        if(y >= 0 && y < grilleCase.length && x >= 0 && x < grilleCase[0].length){
+            return grilleCase[y][x];
+        }else{
+            return null;
+        }
+    }
+
     public void addPiece(Piece p){
         this.listePieces.add(p);
     }

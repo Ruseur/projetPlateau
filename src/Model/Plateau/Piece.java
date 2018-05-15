@@ -28,14 +28,15 @@ public class Piece {
         this.minX = 2147483647;
     }
 
+
     public ArrayList<Case> getListCase() {
         return listCase;
     }
 
-    public void afficherDisposition(){
-        for(int[] ligne: disposition){
-            for(int i: ligne){
-                System.out.print(i +" | ");
+    public void afficherDisposition() {
+        for (int[] ligne : disposition) {
+            for (int i : ligne) {
+                System.out.print(i + " | ");
             }
             System.out.println();
         }
@@ -43,64 +44,115 @@ public class Piece {
 
     //après construction, la pièce va être placée sur la grille de plateau
     //v1 => on construit la pièce avec comme point d'origine dans sa disposition en haut à gauche TODO
-    public void placement(int yOrig, int xOrig){
+    public boolean placement(int yOrig, int xOrig) {
 
+        boolean placementReussi = true;
         int y = 0;
-        int x = 0;
-        boolean controlBorneY = y>= 0 && y+yOrig <= grille.getGrilleCase().length;
-        boolean controlBorneX = x >= 0 && x+xOrig <= grille.getGrilleCase()[0].length;
-
-        while(y < this.disposition.length && controlBorneY){
+        int x;
+        ArrayList<Case> newListCase = new ArrayList<>();
+        while (y < this.disposition.length && placementReussi) {
             x = 0;
-            while(x < disposition[0].length && controlBorneX){
-                majBornes(y,x);
-
-                if(disposition[y][x] == 1){
-                    grille.getGrilleCase()[y][x].setPiece(this);
-                    listCase.add(grille.getGrilleCase()[y][x]);
+            while (x < disposition[0].length && placementReussi) {
+                if (disposition[y][x] == 1) {
+                    Case c = this.grille.getCase(yOrig + y, xOrig + x);
+                    if (c != null) {
+                        placementReussi = c.setPiece(this);
+                        newListCase.add(c);
+                    }
                 }
                 x++;
             }
             y++;
         }
-        if(controlBorneY && controlBorneX){ //la piece a pu se placer en entier
+        if (placementReussi) { //la piece a pu se placer en entier.
+            //desattribution de toutes les cases qui ne sont pas en commun
+
+
+            this.desattribution(this.anciennesCase(this.getListCase(), newListCase));
+            this.listCase = newListCase;
+            majBornes();
             grille.addPiece(this);
-        }else{ //la piece n'a pas pu se placer en entier on libère les pièces
-            this.desattribution();
+        } else { //la piece n'a pas pu se placer en entier on libère les pièces
+            this.desattribution(newListCase);
             System.out.println("Pièce n'a pas pu être placée");
         }
+        return placementReussi;
     }
 
 
-
-    public void translation(int y, int x){
+    public boolean translation(int y, int x) {
         int nbCases = this.getListCase().size();
 
-        this.desattribution();
-
         ArrayList<Case> newCases = new ArrayList<>();
-        for (int i=0; i<nbCases; i++){
+        boolean placementReussi = true;
+        int i = 0;
+        while (i < nbCases && placementReussi) {
             //on récupère la case d'en dessous et on se l'attribue
-            Case c = this.grille.getGrilleCase()[this.getListCase().get(i).getY()-y][this.getListCase().get(i).getX()-x];
-            c.setPiece(this);
-            newCases.add(c);
+            Case c = this.grille.getCase(this.getListCase().get(i).getY() - y, this.getListCase().get(i).getX() - x);
+            if (c != null) {
+                placementReussi = c.setPiece(this);
+                newCases.add(c);
+            }
+            i++;
         }
-        this.listCase = newCases;
-
+        if (placementReussi) {
+            this.desattribution(this.anciennesCase(this.getListCase(), newCases));
+            this.listCase = newCases;
+            majBornes();
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    private void majBornes(int y, int x) {
-        if(y < minY){
-            minY = y;
+    public boolean rotationHoraire() {
+        //transformation de la disposition
+        int largeurDispo = this.disposition[0].length;
+        int hauteurDispo = this.disposition.length;
+
+        int[][] newDispo = new int[largeurDispo][hauteurDispo]; //inversion hauteur largeur
+        for (int y = 0; y < this.disposition.length; y++) {
+            for (int x = 0; x < this.disposition[0].length; x++) {
+                newDispo[x][newDispo[0].length - 1 - y] = this.disposition[y][x];
+            }
         }
-        if(x < minX){
-            minX = x;
+
+        int[][] ancienneDispo = this.disposition;
+        this.disposition = newDispo; //nouvelle dispo necessaire au test de placement de la pièce
+
+
+        if (placement(this.minY, this.minX)) {
+            return true;
+        } else {
+            this.disposition = ancienneDispo; //rollback à l'ancienne dispo
+            return false;
         }
-        if(y > maxY){
-            maxY = y;
-        }
-        if(x > maxX){
-            maxX = x;
+    }
+
+    public boolean fusion() {
+        return false;
+    }
+
+    public boolean suppressionPartielle() {
+        return false;
+    }
+
+    private void majBornes() {
+        for (Case c : this.listCase) {
+            int x = c.getX();
+            int y = c.getY();
+            if (y > this.maxY) {
+                this.maxY = c.getY();
+            }
+            if (y < this.minY) {
+                this.minY = c.getY();
+            }
+            if (x > this.maxX) {
+                this.maxX = c.getX();
+            }
+            if (x < this.minX) {
+                this.minX = x;
+            }
         }
     }
 
@@ -124,9 +176,23 @@ public class Piece {
         return maxY;
     }
 
-    private void desattribution(){
-        for(Case c: this.getListCase()){
+    private void desattribution(ArrayList<Case> listCase) {
+        for (Case c : listCase) {
             c.raz();
         }
+    }
+
+    public ArrayList<Case> anciennesCase(ArrayList<Case> ancienneListe, ArrayList<Case> nouvelleListe) {
+        // Prepare an intersection
+        ArrayList<Case> intersection = new ArrayList<Case>(ancienneListe);
+        intersection.retainAll(nouvelleListe);
+        // Subtract the intersection from the union
+        ancienneListe.removeAll(intersection);
+        // Print the result
+        for (Case c : ancienneListe) {
+            System.out.println(c.getX());
+        }
+
+        return ancienneListe;
     }
 }

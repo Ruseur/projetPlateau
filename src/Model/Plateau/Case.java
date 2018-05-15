@@ -15,8 +15,13 @@ public class Case {
         this.piece = null;
     }
 
-    public void setPiece(Piece piece) {
-        this.piece = piece;
+    public boolean setPiece(Piece piece) {
+        if(this.piece == null || piece.getId() == this.getPiece().getId()){
+            this.piece = piece;
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public Piece getPiece() {
