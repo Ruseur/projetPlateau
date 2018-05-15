@@ -6,22 +6,34 @@
 package Controller;
 
 import Model.Plateau.Grille;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
+import view.GamePanel;
 import view.Main;
 
 /**
  *
  * @author vvhuan
  */
-public class Controleur implements EventHandler<MouseEvent>{
+public class GameController implements EventHandler<MouseEvent>{
+
+    protected GamePanel gamePanel;
+    private BoardController boardController;
     private Main vue;
     private Grille grille;
 
-    public Controleur(Main vue, Grille grille){
+    public GameController(){
+        GamePanel gamePanel = new GamePanel();
+        this.gamePanel = gamePanel;
+    }
+
+    public GameController(Main vue, Grille grille){
         this.vue = vue;
         this.grille = grille;
     }
@@ -42,5 +54,8 @@ public class Controleur implements EventHandler<MouseEvent>{
             }
         }
     }
-    
+
+    public GamePanel getGamePanel() {
+        return gamePanel;
+    }
 }

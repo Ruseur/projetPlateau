@@ -5,7 +5,7 @@
  */
 package view;
 
-import Controller.Controleur;
+import Controller.GameController;
 import Model.Plateau.Case;
 import Model.Plateau.Grille;
 import java.util.Observable;
@@ -19,9 +19,9 @@ import javafx.scene.shape.Rectangle;
  *
  * @author vvhuan
  */
-public class gridPanel extends GridPane implements Observer{
+public class GridPanel extends GridPane implements Observer{
     
-    public gridPanel(Grille grille, Controleur controleur){
+    public GridPanel(Grille grille, GameController gameControleur){
         for (int i=0; i<grille.getLargeur(); i++)
            for (int j=0; j<grille.getHauteur(); j++){
                Rectangle rec = new Rectangle();
@@ -29,8 +29,8 @@ public class gridPanel extends GridPane implements Observer{
                rec.setHeight(100);
                rec.setFill(grille.getCase(i,j).getColor());
                rec.setStroke(Color.BLACK);
-               rec.setOnMouseEntered(controleur);
-               rec.setOnMouseExited(controleur);
+               rec.setOnMouseEntered(gameControleur);
+               rec.setOnMouseExited(gameControleur);
                this.add(rec, i, j);
             }
     }
