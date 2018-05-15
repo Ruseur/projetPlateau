@@ -43,11 +43,33 @@ public class Main extends Application{
         //Initialiser le menu
         JeuController controleurapp = new JeuController();
         MenuBar menuBar = new MenuBar();
-        Menu menuFile = new Menu("File");
-        MenuItem quit = new MenuItem("Quit");     
+        Menu menuFile = new Menu("Board");
+        MenuItem quit = new MenuItem("Quit");
         quit.setOnAction(controleurapp);
         menuFile.getItems().add(quit);
         menuBar.getMenus().add(menuFile);
+
+
+        // Games Menu
+        Menu gamesMenuFile = new Menu("Games");
+
+        MenuItem blokusItem = new MenuItem("Blokus");
+        // TODO Change by game's controller
+        JeuController blokusController = new JeuController();
+        blokusItem.setOnAction(blokusController);
+
+        MenuItem tetrisItem = new MenuItem("Tetris");
+        // TODO Change by game's controller
+        JeuController tetrisController = new JeuController();
+        tetrisItem.setOnAction(tetrisController);
+
+        MenuItem puzzleItem = new MenuItem("Puzzle");
+        // TODO Change by game's controller
+        JeuController puzzleController = new JeuController();
+        puzzleItem.setOnAction(puzzleController);
+
+        gamesMenuFile.getItems().addAll(blokusItem,tetrisItem,puzzleItem);
+        menuBar.getMenus().add(gamesMenuFile);
         
         //Initialiser la grille
         Grille grille = new Grille(5,5);
