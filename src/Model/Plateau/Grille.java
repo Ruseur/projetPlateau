@@ -2,47 +2,56 @@ package Model.Plateau;
 
 import java.util.Observable;
 import javafx.scene.paint.Color;
+import java.util.ArrayList;
 
 public class Grille extends Observable {
 
     private int hauteur, largeur;
     private Case[][] grilleCase;
-    
-    public Grille(int hauteurPlateau, int largeurPlateau) {
-        this.hauteur = hauteurPlateau;
-        this.largeur = largeurPlateau;
-        this.grilleCase = new Case[largeurPlateau][hauteurPlateau];
+    ArrayList<Piece> listePieces;
 
-        for(int i  = 0; i < largeurPlateau; i++){
-            for(int j  = 0; j < hauteurPlateau; j++){
+    public Grille(int largeurPlateau, int hauteurPlateau) {
+        this.grilleCase = new Case[hauteurPlateau][largeurPlateau];
+
+        for(int i  = 0; i < hauteurPlateau; i++){
+            for(int j  = 0; j < largeurPlateau; j++){
                 this.grilleCase[i][j] = new Case(i,j);
             }
         }
+
+        this.listePieces = new ArrayList<>();
     }
 
     public Case[][] getGrilleCase() {
         return grilleCase;
     }
-    
-    public Case getCase(int x, int y)
-    {
-        return grilleCase[x][y];
+
+    public Case getCase(int y, int x){
+        if(y >= 0 && y < grilleCase.length && x >= 0 && x < grilleCase[0].length){
+            return grilleCase[y][x];
+        }else{
+            return null;
+        }
     }
-    
+
+    public void addPiece(Piece p){
+        this.listePieces.add(p);
+    }
+
     public void entered(int x, int y){
         grilleCase[x][y].setColor(Color.BLACK);
-        
+
         setChanged();
         notifyObservers(grilleCase[x][y]);
     }
-    
+
     public void exited(int x, int y){
         grilleCase[x][y].setColor(Color.RED);
-        
+
         setChanged();
         notifyObservers(grilleCase[x][y]);
     }
-    
+
 
     /**
      * @return the hauteur

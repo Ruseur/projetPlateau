@@ -5,11 +5,13 @@ import javafx.scene.paint.Color;
 public class Case {
     int y;
     int x;
+    Piece piece;
     private Color color;
 
-    public Case(int x, int y) {
-        this.x = x;
+    public Case(int y, int x) {
+        this.piece = null;
         this.y = y;
+        this.x = x;
         this.color = Color.WHITE;
     }
 
@@ -19,6 +21,23 @@ public class Case {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public void raz(){
+        this.piece = null;
+    }
+
+    public boolean setPiece(Piece piece) {
+        if(this.piece == null || piece.getId() == this.getPiece().getId()){
+            this.piece = piece;
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public Piece getPiece() {
+        return piece;
     }
 
     public void setY(int y) {
