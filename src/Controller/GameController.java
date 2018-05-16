@@ -6,11 +6,7 @@
 package Controller;
 
 import Model.Plateau.Grille;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
