@@ -70,7 +70,7 @@ public class testModel {
         Piece p = new Piece(g,dispo1);
         p.afficherDisposition();
 
-        p.placement(0,0);
+        p.placement(4,0);
 
         Case[][] grille = g.getGrilleCase();
         for(Case[] ligne : grille){
@@ -89,7 +89,7 @@ public class testModel {
             System.out.println();
         }
 
-        p.rotationHoraire();
+        System.out.println(p.rotationHoraire());
 
         for(Case[] ligne : grille){
             for(Case c: ligne){

@@ -58,6 +58,8 @@ public class Piece {
                     if (c != null) {
                         placementReussi = c.setPiece(this);
                         newListCase.add(c);
+                    }else{
+                        placementReussi = false;
                     }
                 }
                 x++;
