@@ -1,9 +1,12 @@
 package Model.Plateau;
 
+import java.util.Observable;
+import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
-public class Grille {
+public class Grille extends Observable {
 
+    private int hauteur, largeur;
     private Case[][] grilleCase;
     ArrayList<Piece> listePieces;
 
@@ -33,5 +36,48 @@ public class Grille {
 
     public void addPiece(Piece p){
         this.listePieces.add(p);
+    }
+
+    public void entered(int x, int y){
+        grilleCase[x][y].setColor(Color.BLACK);
+
+        setChanged();
+        notifyObservers(grilleCase[x][y]);
+    }
+
+    public void exited(int x, int y){
+        grilleCase[x][y].setColor(Color.RED);
+
+        setChanged();
+        notifyObservers(grilleCase[x][y]);
+    }
+
+
+    /**
+     * @return the hauteur
+     */
+    public int getHauteur() {
+        return hauteur;
+    }
+
+    /**
+     * @param hauteur the hauteur to set
+     */
+    public void setHauteur(int hauteur) {
+        this.hauteur = hauteur;
+    }
+
+    /**
+     * @return the largeur
+     */
+    public int getLargeur() {
+        return largeur;
+    }
+
+    /**
+     * @param largeur the largeur to set
+     */
+    public void setLargeur(int largeur) {
+        this.largeur = largeur;
     }
 }

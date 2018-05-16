@@ -1,14 +1,26 @@
 package Model.Plateau;
 
+import javafx.scene.paint.Color;
+
 public class Case {
     int y;
     int x;
     Piece piece;
+    private Color color;
 
     public Case(int y, int x) {
         this.piece = null;
         this.y = y;
         this.x = x;
+        this.color = Color.WHITE;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public void raz(){
