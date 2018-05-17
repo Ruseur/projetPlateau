@@ -83,16 +83,19 @@ public class TetrisController extends GameController {
     }
 
     public void rotation(){
-
+        this.currentPiece.rotationHoraire();
     }
 
     public void translation(String direction){
         switch (direction){
             case "bas":
+                this.currentPiece.translation(-1,0);
                 break;
             case "gauche":
+                this.currentPiece.translation(0,-1);
                 break;
             case "droite":
+                this.currentPiece.translation(0,1);
                 break;
         }
     }
@@ -151,8 +154,32 @@ public class TetrisController extends GameController {
     @Override
     public void handle(ActionEvent event) {
         if (event.getSource() instanceof Button){
-            if(((Button) event.getSource()).getText().equals("Play"))
-                this.start();
+            String action = ((Button)event.getSource()).getText();
+            switch (action) {
+                case "Play":
+                    this.start();
+                    break;
+                case "Pause":
+                    // TODO
+                    break;
+                case "Reset":
+                    this.start();
+                    break;
+                case "Left":
+                    this.translation("gauche");
+                    break;
+                case "Right":
+                    this.translation("droite");
+                    break;
+                case "Up":
+                    this.rotation();
+                    break;
+                case "Down":
+                    this.translation("bas");
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

@@ -107,7 +107,7 @@ public class Piece {
         int i = 0;
         while (i < nbCases && placementReussi) {
             //on récupère la case d'en dessous et on se l'attribue
-            Case c = this.grille.getCase(this.getListCase().get(i).getY() - y, this.getListCase().get(i).getX() - x);
+            Case c = this.grille.getCase(this.getListCase().get(i).getY() - y, this.getListCase().get(i).getX() + x);
             if (c != null) {
                 placementReussi = c.setPiece(this);
                 newCases.add(c);
