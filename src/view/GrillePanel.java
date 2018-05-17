@@ -19,9 +19,9 @@ import javafx.scene.shape.Rectangle;
  *
  * @author vvhuan
  */
-public class GridPanel extends GridPane implements Observer{
+public class GrillePanel extends GridPane implements Observer{
     
-    public GridPanel(Grille grille, GameController gameControleur){
+    public GrillePanel(Grille grille){
         for (int i=0; i<grille.getLargeur(); i++)
            for (int j=0; j<grille.getHauteur(); j++){
                Rectangle rec = new Rectangle();
@@ -29,8 +29,6 @@ public class GridPanel extends GridPane implements Observer{
                rec.setHeight(100);
                rec.setFill(grille.getCase(i,j).getColor());
                rec.setStroke(Color.BLACK);
-               rec.setOnMouseEntered(gameControleur);
-               rec.setOnMouseExited(gameControleur);
                this.add(rec, i, j);
             }
     }

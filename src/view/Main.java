@@ -8,6 +8,7 @@ package view;
 import Controller.BoardController;
 import Controller.GameController;
 import Controller.TetrisController;
+import Model.Plateau.Grille;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -52,14 +53,8 @@ public class Main extends Application{
 
         gamesMenuFile.getItems().addAll(blokusItem,tetrisItem,puzzleItem);
         menuBar.getMenus().add(gamesMenuFile);
-        
-        //Initialiser la grille
-        /*
-        Grille grille = new Grille(5,5);
-        GameController controleur = new GameController(this, grille);
-        GridPanel gridPane = new GridPanel(grille, controleur);
-        grille.addObserver(gridPane);
-         */
+
+
 
 
 
@@ -67,7 +62,7 @@ public class Main extends Application{
 
         borderpane.setTop(menuBar);
         borderpane.setCenter(gamePanel);
-        Scene scene = new Scene(borderpane, 500, 530);
+        Scene scene = new Scene(borderpane, 500, 700);
         //((VBox) scene.getRoot()).getChildren().addAll(menuBar);
         primaryStage.setTitle("JavaFX / ObserverObservable / MVC example");
         primaryStage.setScene(scene);

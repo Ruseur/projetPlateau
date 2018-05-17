@@ -1,16 +1,21 @@
 package Controller;
 
-import javafx.event.ActionEvent;
+import Model.Plateau.Grille;
 import javafx.event.EventHandler;
-import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
+import view.GrillePanel;
 import view.TetrisPanel;
 
 public class TetrisController extends GameController  implements EventHandler<MouseEvent> {
 
 
     public TetrisController(){
-        TetrisPanel tetrisPanel = new TetrisPanel();
+
+        //Initialiser la vue
+        Grille grille = new Grille(10,20);
+        TetrisPanel tetrisPanel = new TetrisPanel(grille);
+        grille.addObserver(tetrisPanel);
+
         super.gamePanel = tetrisPanel;
     }
 

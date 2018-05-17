@@ -11,6 +11,8 @@ public class Grille extends Observable {
     ArrayList<Piece> listePieces;
 
     public Grille(int largeurPlateau, int hauteurPlateau) {
+        this.setHauteur(hauteurPlateau);
+        this.setLargeur(largeurPlateau);
         this.grilleCase = new Case[hauteurPlateau][largeurPlateau];
 
         for(int i  = 0; i < hauteurPlateau; i++){
