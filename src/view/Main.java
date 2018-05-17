@@ -28,7 +28,6 @@ public class Main extends Application{
         BorderPane borderpane = new BorderPane();
         
         //Initialiser le menu
-        GamePanel gamePanel = new GamePanel();
         BoardController boardController = new BoardController(borderpane);
         MenuBar menuBar = new MenuBar();
         Menu boardMenu = new Menu("Board");
@@ -58,10 +57,11 @@ public class Main extends Application{
 
 
 
+        GameView gameView = new GameView();
 
 
         borderpane.setTop(menuBar);
-        borderpane.setCenter(gamePanel);
+        borderpane.setCenter(gameView.render());
         Scene scene = new Scene(borderpane, 500, 700);
         //((VBox) scene.getRoot()).getChildren().addAll(menuBar);
         primaryStage.setTitle("JavaFX / ObserverObservable / MVC example");

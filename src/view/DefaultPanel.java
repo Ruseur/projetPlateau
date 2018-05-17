@@ -12,8 +12,10 @@ import javafx.scene.layout.GridPane;
  *
  * @author vvhuan
  */
-public class GamePanel extends GridPane{
+public class DefaultPanel extends GridPane{
 
-    public GamePanel(){}
+    public DefaultPanel(){
+        this.add(new Label("Hello world !"), 2, 0);
+    }
 
 }

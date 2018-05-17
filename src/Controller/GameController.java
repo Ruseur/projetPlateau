@@ -6,52 +6,28 @@
 package Controller;
 
 import Model.Plateau.Grille;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
-import view.GamePanel;
+import view.GameView;
 import view.Main;
 
 /**
  *
  * @author vvhuan
  */
-public class GameController implements EventHandler<MouseEvent>{
+public abstract class GameController implements EventHandler<ActionEvent>{
 
-    protected GamePanel gamePanel;
-    private BoardController boardController;
-    private Main vue;
-    private Grille grille;
+    protected GameView gameView;
 
     public GameController(){
-        GamePanel gamePanel = new GamePanel();
-        this.gamePanel = gamePanel;
+        GameView gamePanel = new GameView();
+        this.gameView = gamePanel;
     }
 
-    public GameController(Main vue, Grille grille){
-        this.vue = vue;
-        this.grille = grille;
-    }
-    
-    @Override
-    public void handle(MouseEvent event) {
-        if (event.getEventType().equals(MouseEvent.MOUSE_ENTERED)){
-            if (event.getSource() instanceof Rectangle)
-            {
-                Rectangle r = (Rectangle) event.getSource();
-                grille.entered(GridPane.getRowIndex(r), GridPane.getColumnIndex(r));
-            }
-        } else if (event.getEventType().equals(MouseEvent.MOUSE_EXITED)){
-            if (event.getSource() instanceof Rectangle)
-            {
-                Rectangle r = (Rectangle) event.getSource();
-                grille.exited(GridPane.getRowIndex(r), GridPane.getColumnIndex(r));
-            }
-        }
-    }
-
-    public GamePanel getGamePanel() {
-        return gamePanel;
+    public GameView getView() {
+        return gameView;
     }
 }

@@ -3,10 +3,13 @@ package Controller;
 import Model.Plateau.Case;
 import Model.Plateau.Grille;
 import Model.Plateau.Piece;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import view.GrillePanel;
-import view.TetrisPanel;
+import view.TetrisView;
 
 import java.awt.*;
 import java.sql.Time;
@@ -14,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class TetrisController extends GameController implements EventHandler<MouseEvent> {
+public class TetrisController extends GameController {
 
     private Piece currentPiece;
     private Grille grille;
@@ -24,15 +27,13 @@ public class TetrisController extends GameController implements EventHandler<Mou
     public TetrisController(){
 
         //Initialiser la vue
-        this.grille = new Grille(10,20);
-        TetrisPanel tetrisPanel = new TetrisPanel(this.grille);
-        this.grille.addObserver(tetrisPanel);
-
-        super.gamePanel = tetrisPanel;
+        Grille grille = new Grille(10,20);
+        TetrisView tetrisView = new TetrisView(this, grille);
         this.perdu = false;
-
-        this.start();
+        this.grille = grille;
+        super.gameView = tetrisView;
     }
+
 
     public void start(){
         this.nextTurn();
@@ -147,4 +148,11 @@ public class TetrisController extends GameController implements EventHandler<Mou
     }
 
 
+    @Override
+    public void handle(ActionEvent event) {
+        if (event.getSource() instanceof Button){
+            if(((Button) event.getSource()).getText().equals("Play"))
+                this.start();
+        }
+    }
 }

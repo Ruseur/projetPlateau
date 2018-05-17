@@ -3,16 +3,12 @@ package Controller;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
-import view.GamePanel;
-import view.TetrisPanel;
-
-import java.awt.*;
+import view.GameView;
 
 public class BoardController implements EventHandler<ActionEvent> {
-    BorderPane borderpane;
+    private BorderPane borderpane;
 
     public BoardController(BorderPane borderpane) {
         this.borderpane = borderpane;
@@ -28,19 +24,16 @@ public class BoardController implements EventHandler<ActionEvent> {
                     break;
                 case "Tetris":
                     TetrisController tetrisController = new TetrisController();
-                    this.loadPanel(tetrisController.getGamePanel());
+                    this.loadView(tetrisController.getView());
                     break;
                 default:
-                    this.loadPanel(new GamePanel());
+                    this.loadView(new GameView());
                     break;
             }
-
-
-
         }
     }
 
-    public void loadPanel(GamePanel panel) {
-        this.borderpane.setCenter(panel);
+    private void loadView(GameView view) {
+        this.borderpane.setCenter(view.render());
     }
 }
