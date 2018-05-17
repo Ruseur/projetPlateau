@@ -3,6 +3,7 @@ package view;
 import Controller.TetrisController;
 import Model.Plateau.Grille;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.control.Button;
@@ -31,42 +32,53 @@ public class TetrisView extends GameView{
 
 
         Button play = new Button("Play");
-        play.setOnAction(this);
+        play.setOnMouseClicked(this);
         rightPane.add(play,0,0);
 
         Button pause = new Button("Pause");
-        pause.setOnAction(this);
+        pause.setOnMouseClicked(this);
         rightPane.add(pause,1,0);
 
         Button reset = new Button("Reset");
-        reset.setOnAction(this);
+        reset.setOnMouseClicked(this);
         rightPane.add(reset,0,1);
 
         Button left = new Button("Left");
-        left.setOnAction(this);
+        left.setOnMouseClicked(this);
         rightPane.add(left,0,2);
 
         Button right = new Button("Right");
-        right.setOnAction(this);
+        right.setOnMouseClicked(this);
         rightPane.add(right,1,2);
 
         Button up = new Button("Up");
-        up.setOnAction(this);
+        up.setOnMouseClicked(this);
         rightPane.add(up,0,3);
 
         Button down = new Button("Down");
-        down.setOnAction(this);
+        down.setOnMouseClicked(this);
         rightPane.add(down,1,3);
+
+        rightPane.setOnKeyReleased(this);
+
 
         return rightPane;
     }
 
 
     @Override
-    public void handle(ActionEvent event) {
+    public void handle(Event event) {
         String action = "";
         if (event.getSource() instanceof Button) {
             action = ((Button) event.getSource()).getText();
+        }
+        if (event instanceof KeyEvent) {
+            switch (((KeyEvent) event).getCode()) {
+                case UP: action = "Up"; break;
+                case DOWN: action = "Down"; break;
+                case RIGHT: action = "Right"; break;
+                case LEFT: action = "Left"; break;
+            }
         }
         switch (action) {
             case "Play":
@@ -105,4 +117,5 @@ public class TetrisView extends GameView{
 
         return borderPane;
     }
+
 }
