@@ -1,5 +1,6 @@
 package Model.Plateau;
 
+import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
 public class Piece {
@@ -8,25 +9,41 @@ public class Piece {
     private Grille grille;
     private int[][] disposition;
     private ArrayList<Case> listCase;
+    private Color color;
 
     private int minX;
     private int minY;
     private int maxX;
     private int maxY;
 
-    public Piece(Grille grille, int[][] disposition) {
 
-        this.grille = grille;
+    public Piece(int[][] disposition) {
+        this(disposition, Color.BLUE);
+    }
+
+    public Piece(int[][] disposition, Color color) {
+
+        this.grille = null;
         this.id = 1; //TODO a passer en param
 
         this.disposition = disposition;
         this.listCase = new ArrayList<>();
 
+        this.color = color;
+
         this.maxX = 0;
         this.maxY = 0;
         this.minY = 2147483647;
         this.minX = 2147483647;
+
     }
+
+    public void updatePiece(){
+        for(Case c: this.listCase){
+            this.grille.updateCase(c);
+        }
+    }
+
 
 
     public ArrayList<Case> getListCase() {
@@ -68,12 +85,12 @@ public class Piece {
         }
         if (placementReussi) { //la piece a pu se placer en entier.
             //desattribution de toutes les cases qui ne sont pas en commun
-
-
-            this.desattribution(this.anciennesCase(this.getListCase(), newListCase));
+            ArrayList<Case> saveAncienneCase = this.anciennesCase(this.getListCase(), newListCase);
+            this.desattribution(saveAncienneCase);
             this.listCase = newListCase;
             majBornes();
-            grille.addPiece(this);
+            grille.addPiece(this); //TODO attention lors de la rotation plusieurs ajouts sont possible a modifier
+            this.updatePiece();
         } else { //la piece n'a pas pu se placer en entier on libère les pièces
             this.desattribution(newListCase);
             System.out.println("Pièce n'a pas pu être placée");
@@ -101,6 +118,7 @@ public class Piece {
             this.desattribution(this.anciennesCase(this.getListCase(), newCases));
             this.listCase = newCases;
             majBornes();
+            this.updatePiece();
             return true;
         } else {
             return false;
@@ -181,6 +199,7 @@ public class Piece {
     private void desattribution(ArrayList<Case> listCase) {
         for (Case c : listCase) {
             c.raz();
+            this.grille.updateCase(c);
         }
     }
 
@@ -190,11 +209,15 @@ public class Piece {
         intersection.retainAll(nouvelleListe);
         // Subtract the intersection from the union
         ancienneListe.removeAll(intersection);
-        // Print the result
-        for (Case c : ancienneListe) {
-            System.out.println(c.getX());
-        }
 
         return ancienneListe;
+    }
+
+    public void setGrille(Grille grille) {
+        this.grille = grille;
+    }
+
+    public Color getColor() {
+        return color;
     }
 }

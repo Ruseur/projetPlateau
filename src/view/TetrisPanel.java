@@ -8,6 +8,7 @@ package view;
 import Controller.TetrisController;
 import Model.Plateau.Case;
 import Model.Plateau.Grille;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -34,13 +35,22 @@ public class TetrisPanel extends GamePanel implements Observer{
     }
 
     public TetrisPanel(Grille grille){
+        Button btn = new Button("Start");
+        /*btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });*/
+        this.add(btn,40,3);
         for (int i=0; i<grille.getLargeur(); i++)
             for (int j=0; j<grille.getHauteur(); j++){
                 Rectangle rec = new Rectangle();
                 rec.setWidth(30);
                 rec.setHeight(30);
                 rec.setFill(grille.getCase(j,i).getColor());
-                rec.setStroke(Color.BLACK);
+                rec.setStrokeWidth(0.1);
+                rec.setStroke(Color.WHITE);
                 this.add(rec, i, j);
             }
     }
@@ -50,7 +60,7 @@ public class TetrisPanel extends GamePanel implements Observer{
         if(o instanceof Grille && arg instanceof Case)
         {
             for(Node n: getChildren()){
-                if(GridPane.getRowIndex(n) == ((Case)arg).getX() && GridPane.getColumnIndex(n) == ((Case)arg).getY())
+                if(GridPane.getRowIndex(n) == ((Case)arg).getY() && GridPane.getColumnIndex(n) == ((Case)arg).getX())
                     ((Rectangle) n).setFill(((Case)arg).getColor());
             }
         }

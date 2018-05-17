@@ -4,6 +4,7 @@ import Model.Plateau.Grille;
 import Model.Plateau.Piece;
 import org.json.*;
 
+import javafx.scene.paint.Color;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -67,7 +68,8 @@ public class testModel {
                 {1,1,0},
                 {0,1,1}
         };
-        Piece p = new Piece(g,dispo1);
+        Piece p = new Piece(dispo1, Color.BLUE);
+        p.setGrille(g);
         p.afficherDisposition();
 
         p.placement(4,0);
@@ -132,7 +134,9 @@ public class testModel {
                 {0,1,},
                 {1,1,}
         };
-        Piece p = new Piece(g,dispo1);
+        Piece p = new Piece(dispo1, Color.BLUE);
+        p.setGrille(g);
+
         p.afficherDisposition();
         p.rotationHoraire();
         p.afficherDisposition();p.rotationHoraire();

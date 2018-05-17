@@ -12,7 +12,7 @@ public class Case {
         this.piece = null;
         this.y = y;
         this.x = x;
-        this.color = Color.WHITE;
+        this.color = Color.BLACK;
     }
 
     public Color getColor() {
@@ -25,16 +25,19 @@ public class Case {
 
     public void raz(){
         this.piece = null;
+        this.setColor(Color.BLACK);
     }
 
     public boolean setPiece(Piece piece) {
         if(this.piece == null || piece.getId() == this.getPiece().getId()){
             this.piece = piece;
+            this.setColor(this.piece.getColor());
             return true;
         }else{
             return false;
         }
     }
+
 
     public Piece getPiece() {
         return piece;

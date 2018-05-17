@@ -54,6 +54,11 @@ public class Grille extends Observable {
         notifyObservers(grilleCase[x][y]);
     }
 
+    public void updateCase(Case c){
+        setChanged();
+        notifyObservers(c);
+    }
+
 
     /**
      * @return the hauteur
