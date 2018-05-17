@@ -1,21 +1,11 @@
 package Controller;
 
-import Model.Plateau.Case;
 import Model.Plateau.Grille;
 import Model.Plateau.Piece;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.input.MouseEvent;
-import view.GrillePanel;
 import view.TetrisView;
 
-import java.awt.*;
-import java.sql.Time;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class TetrisController extends GameController {
 
@@ -151,35 +141,35 @@ public class TetrisController extends GameController {
     }
 
 
-    @Override
-    public void handle(ActionEvent event) {
-        if (event.getSource() instanceof Button){
-            String action = ((Button)event.getSource()).getText();
-            switch (action) {
-                case "Play":
-                    this.start();
-                    break;
-                case "Pause":
-                    // TODO
-                    break;
-                case "Reset":
-                    this.start();
-                    break;
-                case "Left":
-                    this.translation("gauche");
-                    break;
-                case "Right":
-                    this.translation("droite");
-                    break;
-                case "Up":
-                    this.rotation();
-                    break;
-                case "Down":
-                    this.translation("bas");
-                    break;
-                default:
-                    break;
-            }
+    /**
+     * Call by @TetrisView
+     * @param action determine which action user wants to do
+     */
+    public void command(String action) {
+        switch (action) {
+            case "Play":
+                this.start();
+                break;
+            case "Pause":
+                // TODO
+                break;
+            case "Reset":
+                this.start();
+                break;
+            case "Left":
+                this.translation("gauche");
+                break;
+            case "Right":
+                this.translation("droite");
+                break;
+            case "Up":
+                this.rotation();
+                break;
+            case "Down":
+                this.translation("bas");
+                break;
+            default:
+                break;
         }
     }
 }
