@@ -5,20 +5,13 @@
  */
 package Controller;
 
-import Model.Plateau.Grille;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.shape.Rectangle;
 import view.GameView;
-import view.Main;
 
 /**
  *
  * @author vvhuan
  */
-public abstract class GameController implements EventHandler<ActionEvent>{
+public abstract class GameController{
 
     protected GameView gameView;
 

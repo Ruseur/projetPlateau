@@ -3,14 +3,7 @@ package Controller;
 import Model.Plateau.Case;
 import Model.Plateau.Grille;
 import Model.Plateau.Piece;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.input.MouseEvent;
-import view.GrillePanel;
 import view.TetrisView;
-
 
 import javafx.scene.paint.Color;
 
@@ -19,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+
 
 public class TetrisController extends GameController {
 
@@ -45,15 +39,15 @@ public class TetrisController extends GameController {
         }*/
         int i = 0;
         //this.currentPiece.rotationHoraire();
-        while(i < 19){
+        /*while(i < 19){
             this.currentPiece.translation(-1,0);
-            /*try{
+            *//*try{
                 TimeUnit.SECONDS.sleep(1);
             }catch(Exception e){
                 System.out.println("Erreur: "+e.getMessage());
-            }*/
+            }*//*
             i++;
-        }
+        }*/
         for(Case[] ligne : this.grille.getGrilleCase()){
             for(Case c: ligne){
                 if(c.getPiece() == null){
@@ -86,16 +80,19 @@ public class TetrisController extends GameController {
     }
 
     public void rotation(){
-
+        this.currentPiece.rotationHoraire();
     }
 
     public void translation(String direction){
         switch (direction){
             case "bas":
+                this.currentPiece.translation(-1,0);
                 break;
             case "gauche":
+                this.currentPiece.translation(0,-1);
                 break;
             case "droite":
+                this.currentPiece.translation(0,1);
                 break;
         }
     }
@@ -176,11 +173,35 @@ public class TetrisController extends GameController {
     }
 
 
-    @Override
-    public void handle(ActionEvent event) {
-        if (event.getSource() instanceof Button){
-            if(((Button) event.getSource()).getText().equals("Play"))
+    /**
+     * Call by @TetrisView
+     * @param action determine which action user wants to do
+     */
+    public void command(String action) {
+        switch (action) {
+            case "Play":
                 this.start();
+                break;
+            case "Pause":
+                // TODO
+                break;
+            case "Reset":
+                this.start();
+                break;
+            case "Left":
+                this.translation("gauche");
+                break;
+            case "Right":
+                this.translation("droite");
+                break;
+            case "Up":
+                this.rotation();
+                break;
+            case "Down":
+                this.translation("bas");
+                break;
+            default:
+                break;
         }
     }
 }
