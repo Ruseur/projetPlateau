@@ -38,6 +38,8 @@ public class GrillePanel extends GridPane implements Observer{
                 rec.setStroke(Color.WHITE);
                 this.add(rec, i, j);
             }
+
+            grille.addObserver(this);
     }
 
     @Override

@@ -2,67 +2,103 @@ package view;
 
 import Controller.TetrisController;
 import Model.Plateau.Grille;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 public class TetrisView extends GameView{
 
 
+    private Grille nextPieceGrille;
     private TetrisController tetrisController;
-    private GrillePanel grillePanel;
+    private Grille grille;
 
     public TetrisView(TetrisController tetrisController, Grille grille) {
 
-        GrillePanel grillePanel = new GrillePanel(grille);
-        grille.addObserver(grillePanel);
+        this.grille = grille;
 
-        this.grillePanel = grillePanel;
+        this.nextPieceGrille = new Grille(4,4);
+
         this.tetrisController = tetrisController;
     }
 
     private Pane getRightPane() {
-        GridPane rightPane = new GridPane();
 
+        BorderPane containerPane = new BorderPane();
+
+        VBox infoBox = new VBox();
+
+
+        containerPane.setTop(this.getInfoBox());
+
+
+
+
+
+        FlowPane gameControllerPane = new FlowPane();
 
         Button play = new Button("Play");
         play.setOnMouseClicked(this);
-        rightPane.add(play,0,0);
 
         Button pause = new Button("Pause");
         pause.setOnMouseClicked(this);
-        rightPane.add(pause,1,0);
 
         Button reset = new Button("Reset");
         reset.setOnMouseClicked(this);
-        rightPane.add(reset,0,1);
 
+        gameControllerPane.getChildren().addAll(play,pause,reset);
+        containerPane.setCenter(gameControllerPane);
+
+
+        GridPane tetrisControllerPane = new GridPane();
         Button left = new Button("Left");
         left.setOnMouseClicked(this);
-        rightPane.add(left,0,2);
+        tetrisControllerPane.add(left,0,1);
 
         Button right = new Button("Right");
         right.setOnMouseClicked(this);
-        rightPane.add(right,1,2);
+        tetrisControllerPane.add(right,2,1);
 
         Button up = new Button("Up");
         up.setOnMouseClicked(this);
-        rightPane.add(up,0,3);
+        tetrisControllerPane.add(up,1,0);
 
         Button down = new Button("Down");
         down.setOnMouseClicked(this);
-        rightPane.add(down,1,3);
+        tetrisControllerPane.add(down,1,1);
 
-        rightPane.setOnKeyPressed(this);
+        containerPane.setOnKeyPressed(this);
 
+        containerPane.setBottom(tetrisControllerPane);
 
-        return rightPane;
+        return containerPane;
+    }
+    public VBox getInfoBox() {
+        VBox vbox = new VBox();
+        vbox.setPadding(new Insets(10));
+        vbox.setSpacing(8);
+
+        Text title = new Text("Info");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+        vbox.getChildren().add(title);
+
+        Pane options[] = new Pane[] {
+                new GrillePanel(this.nextPieceGrille),
+        };
+
+        for (int i=0; i<options.length; i++) {
+            VBox.setMargin(options[i], new Insets(0, 0, 0, 8));
+            vbox.getChildren().add(options[i]);
+        }
+
+        return vbox;
     }
 
 
@@ -111,9 +147,30 @@ public class TetrisView extends GameView{
     public Pane render() {
 
         BorderPane borderPane = new BorderPane();
-        borderPane.setCenter(this.grillePanel);
+
+        /**
+         * Top Pane
+         */
+        HBox hbox = new HBox();
+        hbox.setPadding(new Insets(15, 12, 15, 12));
+        hbox.setSpacing(10);
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setStyle("-fx-background-color: #336699;");
+        Label title = new Label("Tetris");
+        title.setStyle("\n" +
+                "    -fx-font-size: 18px;\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #333333;");
+        hbox.getChildren().add(title);
+        borderPane.setTop(hbox);
+
+
+        borderPane.setCenter(new GrillePanel(this.grille));
 
         borderPane.setRight(this.getRightPane());
+
+
+
 
         return borderPane;
     }

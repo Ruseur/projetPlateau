@@ -1,11 +1,13 @@
 package view;
 
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.layout.Pane;
 
-public class GameView extends Pane implements EventHandler<Event> {
+import java.util.Observable;
+import java.util.Observer;
+
+public class GameView extends Pane implements EventHandler<Event>, Observer {
 
     public Pane render() {
         return new DefaultPanel();
@@ -13,6 +15,11 @@ public class GameView extends Pane implements EventHandler<Event> {
 
     @Override
     public void handle(Event event) {
+
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
 
     }
 }
