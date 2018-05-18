@@ -17,14 +17,14 @@ public class Piece {
     private int maxY;
 
 
-    public Piece(int[][] disposition) {
-        this(disposition, Color.BLUE);
+    public Piece(int id, int[][] disposition) {
+        this(id, disposition, Color.BLUE);
     }
 
-    public Piece(int[][] disposition, Color color) {
+    public Piece(int id, int[][] disposition, Color color) {
 
         this.grille = null;
-        this.id = 1; //TODO a passer en param
+        this.id = id;
 
         this.disposition = disposition;
         this.listCase = new ArrayList<>();
@@ -67,21 +67,27 @@ public class Piece {
         int y = 0;
         int x;
         ArrayList<Case> newListCase = new ArrayList<>();
-        while (y < this.disposition.length && placementReussi) {
-            x = 0;
-            while (x < disposition[0].length && placementReussi) {
-                if (disposition[y][x] == 1) {
-                    Case c = this.grille.getCase(yOrig + y, xOrig + x);
-                    if (c != null) {
-                        placementReussi = c.setPiece(this);
-                        newListCase.add(c);
-                    }else{
-                        placementReussi = false;
+        try {
+
+
+            while (y < this.disposition.length && placementReussi) {
+                x = 0;
+                while (x < disposition[0].length && placementReussi) {
+                    if (disposition[y][x] == 1) {
+                        Case c = this.grille.getCase(yOrig + y, xOrig + x);
+                        if (c != null) {
+                            placementReussi = c.setPiece(this);
+                            newListCase.add(c);
+                        } else {
+                            placementReussi = false;
+                        }
                     }
+                    x++;
                 }
-                x++;
+                y++;
             }
-            y++;
+        }catch (Exception e){
+            e.printStackTrace();
         }
         if (placementReussi) { //la piece a pu se placer en entier.
             //desattribution de toutes les cases qui ne sont pas en commun
@@ -109,8 +115,11 @@ public class Piece {
             //on récupère la case d'en dessous et on se l'attribue
             Case c = this.grille.getCase(this.getListCase().get(i).getY() - y, this.getListCase().get(i).getX() - x);
             if (c != null) {
+                //System.out.println("Case trouvée y:" + c.getY() + " x:"+c.getX());
                 placementReussi = c.setPiece(this);
                 newCases.add(c);
+            }else{
+                placementReussi = false;
             }
             i++;
         }
@@ -121,6 +130,7 @@ public class Piece {
             this.updatePiece();
             return true;
         } else {
+            System.out.println("La pièce n'a pas pu être translatée");
             return false;
         }
     }

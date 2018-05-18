@@ -68,7 +68,7 @@ public class testModel {
                 {1,1,0},
                 {0,1,1}
         };
-        Piece p = new Piece(dispo1, Color.BLUE);
+        Piece p = new Piece(1,dispo1, Color.BLUE);
         p.setGrille(g);
         p.afficherDisposition();
 
@@ -134,7 +134,7 @@ public class testModel {
                 {0,1,},
                 {1,1,}
         };
-        Piece p = new Piece(dispo1, Color.BLUE);
+        Piece p = new Piece(1,dispo1, Color.BLUE);
         p.setGrille(g);
 
         p.afficherDisposition();
