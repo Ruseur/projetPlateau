@@ -1,6 +1,5 @@
+import Controller.BoardController;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -9,10 +8,12 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
+        BoardController boardController = new BoardController();
 
-        Parent root = FXMLLoader.load(getClass().getResource("sample/sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        Scene scene = new Scene(boardController.getBoardView(), 500, 700);
+
+        primaryStage.setTitle("Amazing Board Games !");
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 

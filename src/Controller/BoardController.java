@@ -1,39 +1,27 @@
 package Controller;
 
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.MenuItem;
-import javafx.scene.layout.BorderPane;
-import view.GameView;
+import Model.Plateau.Plateau;
+import view.BoardView;
 
-public class BoardController implements EventHandler<ActionEvent> {
-    private BorderPane borderpane;
+public class BoardController {
+    private BoardView boardView;
+    private Plateau plateau;
 
-    public BoardController(BorderPane borderpane) {
-        this.borderpane = borderpane;
+    public BoardController() {
+        this.plateau = new Plateau();
+        this.boardView = new BoardView(this, this.plateau);
     }
 
-    @Override
-    public void handle(ActionEvent event) {
-        if (event.getSource() instanceof MenuItem){
-            String source = ((MenuItem)event.getSource()).getText();
-            switch (source) {
-                case "Quit":
-                    Platform.exit();
-                    break;
-                case "Tetris":
-                    TetrisController tetrisController = new TetrisController();
-                    this.loadView(tetrisController.getView());
-                    break;
-                default:
-                    this.loadView(new GameView());
-                    break;
-            }
+    public void changeGame(String gameName){
+        switch (gameName) {
+            case "Tetris":
+                TetrisController tetrisController = new TetrisController(this.plateau);
+                this.boardView.setCenter(tetrisController.getGameView());
+                break;
         }
     }
 
-    private void loadView(GameView view) {
-        this.borderpane.setCenter(view.render());
+    public BoardView getBoardView() {
+        return this.boardView;
     }
 }

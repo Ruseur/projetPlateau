@@ -1,8 +1,10 @@
 package Controller;
 
+import Model.Jeu.Tetris;
 import Model.Plateau.Case;
 import Model.Plateau.Grille;
 import Model.Plateau.Piece;
+import Model.Plateau.Plateau;
 import view.TetrisView;
 
 import javafx.scene.paint.Color;
@@ -16,16 +18,19 @@ import java.util.concurrent.TimeUnit;
 
 public class TetrisController extends GameController {
 
+    private Tetris tetris;
     private Piece currentPiece;
     private Grille grille;
     private Piece nextPiece;
     private boolean perdu;
 
-    public TetrisController(){
+    public TetrisController(Plateau plateau){
+        super(plateau);
 
-        //Initialiser la vue
         Grille grille = new Grille(10,20);
-        TetrisView tetrisView = new TetrisView(this, grille);
+        Tetris tetris = new Tetris(grille);
+        TetrisView tetrisView = new TetrisView(this, tetris);
+        this.tetris = tetris;
         this.perdu = false;
         this.grille = grille;
         super.gameView = tetrisView;

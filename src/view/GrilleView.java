@@ -24,10 +24,10 @@ import java.util.Observer;
  *
  * @author vvhuan
  */
-public class GrillePanel extends GridPane implements Observer{
+public class GrilleView extends GridPane implements Observer{
 
 
-    public GrillePanel(Grille grille){
+    public GrilleView(Grille grille){
         for (int i=0; i<grille.getLargeur(); i++)
             for (int j=0; j<grille.getHauteur(); j++){
                 Rectangle rec = new Rectangle();

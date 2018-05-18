@@ -6,16 +6,21 @@
 package view;
 
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 /**
  *
  * @author vvhuan
  */
-public class DefaultPanel extends GridPane{
+public class DefaultView extends BorderPane {
 
-    public DefaultPanel(){
-        this.add(new Label("Hello world !"), 2, 0);
+    public DefaultView(){
+        this.setTop(new Label("Hello world !"));
+    }
+
+    public DefaultView(String text){
+        this.setTop(new Label(text));
     }
 
 }

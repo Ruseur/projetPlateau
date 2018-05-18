@@ -1,6 +1,7 @@
 package view;
 
 import Controller.TetrisController;
+import Model.Jeu.Tetris;
 import Model.Plateau.Grille;
 import javafx.event.Event;
 import javafx.geometry.Insets;
@@ -18,15 +19,22 @@ public class TetrisView extends GameView{
 
     private Grille nextPieceGrille;
     private TetrisController tetrisController;
-    private Grille grille;
 
-    public TetrisView(TetrisController tetrisController, Grille grille) {
 
-        this.grille = grille;
+    public TetrisView(TetrisController tetrisController, Tetris tetris) {
+        super(tetrisController, tetris);
+
+        this.setJeu(tetris);
 
         this.nextPieceGrille = new Grille(4,4);
-
         this.tetrisController = tetrisController;
+
+
+        this.setTop(this.getTopPane());
+        this.setCenter(new GrilleView(this.getJeu().getGrille()));
+        this.setRight(this.getRightPane());
+
+        this.setOnKeyPressed(this);
     }
 
     private Pane getRightPane() {
@@ -74,13 +82,12 @@ public class TetrisView extends GameView{
         down.setOnMouseClicked(this);
         tetrisControllerPane.add(down,1,1);
 
-        containerPane.setOnKeyPressed(this);
 
         containerPane.setBottom(tetrisControllerPane);
 
         return containerPane;
     }
-    public VBox getInfoBox() {
+    private VBox getInfoBox() {
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(8);
@@ -90,7 +97,7 @@ public class TetrisView extends GameView{
         vbox.getChildren().add(title);
 
         Pane options[] = new Pane[] {
-                new GrillePanel(this.nextPieceGrille),
+                new GrilleView(this.nextPieceGrille),
         };
 
         for (int i=0; i<options.length; i++) {
@@ -99,6 +106,23 @@ public class TetrisView extends GameView{
         }
 
         return vbox;
+    }
+
+    private Pane getTopPane() {
+
+        HBox hbox = new HBox();
+        hbox.setPadding(new Insets(15, 12, 15, 12));
+        hbox.setSpacing(10);
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setStyle("-fx-background-color: #336699;");
+        Label title = new Label("Tetris");
+        title.setStyle("\n" +
+                "    -fx-font-size: 18px;\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #333333;");
+        hbox.getChildren().add(title);
+
+        return hbox;
     }
 
 
@@ -143,36 +167,5 @@ public class TetrisView extends GameView{
         }
     }
 
-    @Override
-    public Pane render() {
-
-        BorderPane borderPane = new BorderPane();
-
-        /**
-         * Top Pane
-         */
-        HBox hbox = new HBox();
-        hbox.setPadding(new Insets(15, 12, 15, 12));
-        hbox.setSpacing(10);
-        hbox.setAlignment(Pos.CENTER);
-        hbox.setStyle("-fx-background-color: #336699;");
-        Label title = new Label("Tetris");
-        title.setStyle("\n" +
-                "    -fx-font-size: 18px;\n" +
-                "    -fx-font-weight: bold;\n" +
-                "    -fx-text-fill: #333333;");
-        hbox.getChildren().add(title);
-        borderPane.setTop(hbox);
-
-
-        borderPane.setCenter(new GrillePanel(this.grille));
-
-        borderPane.setRight(this.getRightPane());
-
-
-
-
-        return borderPane;
-    }
 
 }

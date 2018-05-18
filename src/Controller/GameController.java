@@ -5,6 +5,7 @@
  */
 package Controller;
 
+import Model.Plateau.Plateau;
 import view.GameView;
 
 /**
@@ -12,15 +13,14 @@ import view.GameView;
  * @author vvhuan
  */
 public abstract class GameController{
-
+    protected Plateau plateau;
     protected GameView gameView;
 
-    public GameController(){
-        GameView gamePanel = new GameView();
-        this.gameView = gamePanel;
+    public GameController(Plateau plateau) {
+        this.plateau = plateau;
     }
 
-    public GameView getView() {
-        return gameView;
+    public GameView getGameView() {
+        return this.gameView;
     }
 }
