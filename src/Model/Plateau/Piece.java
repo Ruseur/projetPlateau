@@ -67,8 +67,6 @@ public class Piece {
         int y = 0;
         int x;
         ArrayList<Case> newListCase = new ArrayList<>();
-        try {
-
 
             while (y < this.disposition.length && placementReussi) {
                 x = 0;
@@ -86,19 +84,21 @@ public class Piece {
                 }
                 y++;
             }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
         if (placementReussi) { //la piece a pu se placer en entier.
             //desattribution de toutes les cases qui ne sont pas en commun
-            ArrayList<Case> saveAncienneCase = this.anciennesCase(this.getListCase(), newListCase);
+            /*ArrayList<Case> saveAncienneCase = this.anciennesCase(this.getListCase(), newListCase);
             this.desattribution(saveAncienneCase);
             this.listCase = newListCase;
             majBornes();
-            grille.addPiece(this); //TODO attention lors de la rotation plusieurs ajouts sont possible a modifier
+            //grille.addPiece(this); //TODO attention lors de la rotation plusieurs ajouts sont possible a modifier
+            this.updatePiece();*/
+
+            this.desattribution(this.anciennesCase(this.getListCase(), newListCase));
+            this.listCase = newListCase;
+            majBornes();
             this.updatePiece();
         } else { //la piece n'a pas pu se placer en entier on libère les pièces
-            this.desattribution(newListCase);
+            this.desattribution(this.anciennesCase(newListCase, this.listCase));
             System.out.println("Pièce n'a pas pu être placée");
         }
         return placementReussi;
@@ -115,7 +115,7 @@ public class Piece {
             //on récupère la case d'en dessous et on se l'attribue
             Case c = this.grille.getCase(this.getListCase().get(i).getY() - y, this.getListCase().get(i).getX() + x);
             if (c != null) {
-                //System.out.println("Case trouvée y:" + c.getY() + " x:"+c.getX());
+                /*System.out.println("Case trouvée y:" + c.getY() + " x:"+c.getX());*/
                 placementReussi = c.setPiece(this);
                 newCases.add(c);
             }else{
@@ -130,6 +130,7 @@ public class Piece {
             this.updatePiece();
             return true;
         } else {
+            this.desattribution(this.anciennesCase(newCases, this.listCase));
             System.out.println("La pièce n'a pas pu être translatée");
             return false;
         }
@@ -168,17 +169,19 @@ public class Piece {
     }
 
     private void majBornes() {
+        this.minX = this.listCase.get(0).getX();
+        this.minY = this.listCase.get(0).getY();
         for (Case c : this.listCase) {
             int x = c.getX();
             int y = c.getY();
             if (y > this.maxY) {
-                this.maxY = c.getY();
+                this.maxY = y;
             }
             if (y < this.minY) {
-                this.minY = c.getY();
+                this.minY = y;
             }
             if (x > this.maxX) {
-                this.maxX = c.getX();
+                this.maxX = x;
             }
             if (x < this.minX) {
                 this.minX = x;
@@ -208,14 +211,16 @@ public class Piece {
 
     private void desattribution(ArrayList<Case> listCase) {
         for (Case c : listCase) {
-            c.raz();
-            this.grille.updateCase(c);
+            if(c.getPiece().getId() == this.getId()){
+                c.raz();
+                this.grille.updateCase(c);
+            }
         }
     }
 
     public ArrayList<Case> anciennesCase(ArrayList<Case> ancienneListe, ArrayList<Case> nouvelleListe) {
         // Prepare an intersection
-        ArrayList<Case> intersection = new ArrayList<Case>(ancienneListe);
+        ArrayList<Case> intersection = new ArrayList<>(ancienneListe);
         intersection.retainAll(nouvelleListe);
         // Subtract the intersection from the union
         ancienneListe.removeAll(intersection);
