@@ -24,7 +24,8 @@ public class Grille extends Observable {
         this.listePieces = new ArrayList<>();
     }
 
-    public void suppressionLigne(){ //TODO améliorer en parcourant seulement les lignes bornées par la pièce venant d'etre posée
+    public int suppressionLigne(){ //TODO améliorer en parcourant seulement les lignes bornées par la pièce venant d'etre posée
+        int nbLignesSuppr = 0;
         int y = 0;
         int x;
 
@@ -36,6 +37,7 @@ public class Grille extends Observable {
                 x++;
             }
             if(ligneOccupee){ //toutes les cases sont occupées
+                nbLignesSuppr++;
                 for(int i = y; i > 0; i--){
                     grilleCase[i] = grilleCase[i-1];
                     for(int colUpdate = 0; colUpdate < grilleCase[0].length; colUpdate++){
@@ -57,12 +59,13 @@ public class Grille extends Observable {
                 if(c.getPiece() !=null){
                     id = c.getPiece().getId();
                 }
-                System.out.print("("+ c.getY()+" "+ c.getX() +")| ");
+                /*System.out.print("("+ c.getY()+" "+ c.getX() +")| ");*/
 
 
             }
             System.out.println();
         }
+        return nbLignesSuppr;
     }
 
     public Case[][] getGrilleCase() {

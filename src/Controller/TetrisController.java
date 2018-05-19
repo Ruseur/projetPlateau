@@ -28,6 +28,9 @@ public class TetrisController extends GameController {
     private boolean perdu;
     private Timer timer;
 
+    private int currentLevel;
+    private int nbPieceLevel;
+
     public TetrisController(Plateau plateau){
         super(plateau);
 
@@ -39,6 +42,9 @@ public class TetrisController extends GameController {
         this.grille = grille;
         super.gameView = tetrisView;
 
+        this.currentLevel = 1;
+        this.nbPieceLevel = 0;
+
         this.timer = new Timer();
         this.start();
     }
@@ -48,9 +54,9 @@ public class TetrisController extends GameController {
         this.currentPiece = this.generationPiece();
         this.currentPiece.setGrille(this.grille);
 
-        this.currentPiece.placement(0, 3);
+        this.currentPiece.placement(0, 4);
 
-        timer.schedule(nextFrameTask(), 0, 400);
+        timer.schedule(nextFrameTask(), 0, 1000/this.currentLevel);
 
 
     }
@@ -67,6 +73,9 @@ public class TetrisController extends GameController {
             if(!this.currentPiece.placement(0, 3)){
                 this.perdu = true;
             }
+            else{
+                this.gestionLevel();
+            }
         }
 
         /*for(Case[] ligne : this.grille.getGrilleCase()){
@@ -81,6 +90,20 @@ public class TetrisController extends GameController {
             }
             System.out.println();
         }*/
+    }
+
+    public void gestionLevel(){
+        if(nbPieceLevel >= 10){
+            nbPieceLevel =0;
+            currentLevel++;
+
+            this.timer.cancel();
+            this.timer = new Timer();
+            timer.schedule(nextFrameTask(), 0, 1000/this.currentLevel);
+        }
+        else{
+            nbPieceLevel++;
+        }
     }
 
     public void rotation() {
@@ -109,7 +132,9 @@ public class TetrisController extends GameController {
     }
 
     public void suppressionLigne() {
-        this.grille.suppressionLigne();
+        int nbLignesSuppr = this.grille.suppressionLigne();
+        int points = (int) (10* Math.pow(nbLignesSuppr, 2));
+        this.tetris.setScore(this.tetris.getScore()+points);
     }
 
     public void finPartie(){
