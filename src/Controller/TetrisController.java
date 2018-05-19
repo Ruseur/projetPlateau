@@ -42,11 +42,10 @@ public class TetrisController extends GameController {
 
         this.tetris.setNextPieceGrille(new Grille(5,4));
 
-        this.currentLevel = 1;
+        this.tetris.setLevel(1);
         this.nbPieceLevel = 0;
 
         this.timer = new Timer();
-        this.start();
     }
 
 
@@ -61,7 +60,7 @@ public class TetrisController extends GameController {
 
 
         this.tetris.setStatus("playing");
-        timer.schedule(nextFrameTask(), 0, 1000/this.currentLevel);
+        timer.schedule(nextFrameTask(), 0, 1000/this.tetris.getLevel());
 
 
     }
@@ -113,11 +112,11 @@ public class TetrisController extends GameController {
     public void gestionLevel(){
         if(nbPieceLevel >= 10){
             nbPieceLevel =0;
-            currentLevel++;
+            this.tetris.setLevel(this.tetris.getLevel() + 1);
 
             this.timer.cancel();
             this.timer = new Timer();
-            timer.schedule(nextFrameTask(), 0, 1000/this.currentLevel);
+            timer.schedule(nextFrameTask(), 0, 1000/this.tetris.getLevel());
         }
         else{
             nbPieceLevel++;
@@ -243,18 +242,20 @@ public class TetrisController extends GameController {
                 this.start();
                 break;
             case "Left":
-                this.translation("gauche");
+                if(this.tetris.getStatus().equals("playing"))
+                    this.translation("gauche");
                 break;
             case "Right":
-                this.translation("droite");
+                if(this.tetris.getStatus().equals("playing"))
+                    this.translation("droite");
                 break;
             case "Up":
-                this.rotation();
+                if(this.tetris.getStatus().equals("playing"))
+                    this.rotation();
                 break;
             case "Down":
-                this.translation("bas");
-                break;
-            default:
+                if(this.tetris.getStatus().equals("playing"))
+                    this.translation("bas");
                 break;
         }
     }

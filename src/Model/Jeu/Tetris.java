@@ -6,6 +6,7 @@ import Model.Plateau.Piece;
 public class Tetris extends Jeu{
 
     private Grille nextPieceGrille;
+    private int level;
 
     public Tetris(){}
 
@@ -21,5 +22,13 @@ public class Tetris extends Jeu{
         this.nextPieceGrille = nextPieceGrille;
         setChanged();
         notifyObservers(nextPieceGrille);
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }
