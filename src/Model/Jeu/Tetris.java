@@ -7,6 +7,6 @@ public class Tetris extends Jeu{
     public Tetris(){}
 
     public Tetris(Grille grille) {
-        this.grille = grille;
+        this.setGrille(grille);
     }
 }

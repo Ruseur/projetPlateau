@@ -24,8 +24,6 @@ public class TetrisView extends GameView{
     public TetrisView(TetrisController tetrisController, Tetris tetris) {
         super(tetrisController, tetris);
 
-        this.setJeu(tetris);
-
         this.nextPieceGrille = new Grille(4,4);
         this.tetrisController = tetrisController;
 
@@ -41,14 +39,8 @@ public class TetrisView extends GameView{
 
         BorderPane containerPane = new BorderPane();
 
-        VBox infoBox = new VBox();
-
 
         containerPane.setTop(this.getInfoBox());
-
-
-
-
 
         FlowPane gameControllerPane = new FlowPane();
 
@@ -96,6 +88,7 @@ public class TetrisView extends GameView{
         title.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         vbox.getChildren().add(title);
 
+        vbox.getChildren().add(new ScoreView(this.getJeu().getScore()));
         Pane options[] = new Pane[] {
                 new GrilleView(this.nextPieceGrille),
         };

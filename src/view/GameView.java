@@ -5,6 +5,9 @@ import Model.Jeu.Jeu;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
+
 import java.util.Observable;
 import java.util.Observer;
 
@@ -27,8 +30,10 @@ public class GameView extends BorderPane implements EventHandler<Event>, Observe
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("gameView");
-
+        if(o instanceof Jeu && arg.equals("ScoreUpdate")) {
+            ScoreView scoreView = (ScoreView) this.lookup("ScoreView");
+            scoreView.update(this.jeu.getScore());
+        }
     }
 
     public Jeu getJeu() {
@@ -41,9 +46,5 @@ public class GameView extends BorderPane implements EventHandler<Event>, Observe
 
     public GameController getGameController() {
         return gameController;
-    }
-
-    protected void setGameController(GameController gameController) {
-        this.gameController = gameController;
     }
 }
