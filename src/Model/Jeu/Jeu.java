@@ -5,6 +5,8 @@ import Model.Plateau.Grille;
 import java.util.Observable;
 
 public class Jeu extends Observable {
+    // "playing" "paused" "initial" "finished"
+    private String status = "initial";
     private Grille grille;
     private int Score = 0;
 
@@ -24,5 +26,15 @@ public class Jeu extends Observable {
         Score = score;
         setChanged();
         notifyObservers("ScoreUpdate");
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+        setChanged();
+        notifyObservers("StatusUpdate");
     }
 }

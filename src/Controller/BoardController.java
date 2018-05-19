@@ -1,7 +1,9 @@
 package Controller;
 
 import Model.Plateau.Plateau;
+import javafx.scene.layout.Pane;
 import view.BoardView;
+import view.GameView;
 
 public class BoardController {
     private BoardView boardView;
@@ -16,7 +18,7 @@ public class BoardController {
         switch (gameName) {
             case "Tetris":
                 TetrisController tetrisController = new TetrisController(this.plateau);
-                this.boardView.setCenter(tetrisController.getGameView());
+                this.boardView.setGameView(tetrisController.getGameView());
                 break;
         }
     }

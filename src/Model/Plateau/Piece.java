@@ -2,8 +2,9 @@ package Model.Plateau;
 
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
+import java.util.Observable;
 
-public class Piece {
+public class Piece extends Observable {
 
     private int id;
     private Grille grille;

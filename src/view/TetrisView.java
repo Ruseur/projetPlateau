@@ -2,7 +2,6 @@ package view;
 
 import Controller.TetrisController;
 import Model.Jeu.Tetris;
-import Model.Plateau.Grille;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,26 +13,44 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
+
 public class TetrisView extends GameView{
 
-
-    private Grille nextPieceGrille;
+    private Tetris jeu;
     private TetrisController tetrisController;
 
 
     public TetrisView(TetrisController tetrisController, Tetris tetris) {
         super(tetrisController, tetris);
 
-        this.nextPieceGrille = new Grille(4,4);
+        this.jeu = tetris;
         this.tetrisController = tetrisController;
 
-
-        this.setTop(this.getTopPane());
-        this.setCenter(new GrilleView(this.getJeu().getGrille()));
-        this.setRight(this.getRightPane());
+        this.loadHomeView();
 
         this.setOnKeyPressed(this);
     }
+
+    public void loadHomeView() {
+        this.setTop(this.getTopPane());
+        this.setCenter(this.getRightPane());
+    }
+
+
+    @Override
+    public void loadInGameView() {
+        this.setTop(this.getTopPane());
+        this.setCenter(new GrilleView(this.getJeu().getGrille()));
+        this.setRight(this.getRightPane());
+    }
+
+    @Override
+    protected void loadFinishView() {
+        this.setCenter(new DefaultView("fini"));
+        this.setRight(this.getRightPane());
+    }
+
 
     private Pane getRightPane() {
 
@@ -88,14 +105,16 @@ public class TetrisView extends GameView{
         title.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         vbox.getChildren().add(title);
 
-        vbox.getChildren().add(new ScoreView(this.getJeu().getScore()));
-        Pane options[] = new Pane[] {
-                new GrilleView(this.nextPieceGrille),
-        };
+        ArrayList<Pane> options = new ArrayList<Pane>();
+        options.add(new ScoreView(this.getJeu().getScore()));
 
-        for (int i=0; i<options.length; i++) {
-            VBox.setMargin(options[i], new Insets(0, 0, 0, 8));
-            vbox.getChildren().add(options[i]);
+        if(this.jeu.getStatus().equals("playing")) {
+            options.add(new GrilleView(this.jeu.getNextPieceGrille()));
+        }
+
+        for (Pane option : options) {
+            VBox.setMargin(option, new Insets(0, 0, 0, 8));
+            vbox.getChildren().add(option);
         }
 
         return vbox;

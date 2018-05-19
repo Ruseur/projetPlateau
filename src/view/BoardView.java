@@ -33,6 +33,7 @@ public class BoardView extends BorderPane implements EventHandler, Observer {
 
         this.setTop(this.getMenuBar());
         this.setCenter(new DefaultView());
+        this.getCenter().setId("GameView");
     }
 
     private MenuBar getMenuBar() {
@@ -83,5 +84,9 @@ public class BoardView extends BorderPane implements EventHandler, Observer {
     @Override
     public void update(Observable o, Object arg) {
 
+    }
+
+    public void setGameView(GameView gameView) {
+        this.setCenter(gameView);
     }
 }

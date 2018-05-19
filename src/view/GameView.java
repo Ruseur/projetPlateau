@@ -4,14 +4,14 @@ import Controller.GameController;
 import Model.Jeu.Jeu;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
+import javafx.scene.layout.Pane;
 
 import java.util.Observable;
 import java.util.Observer;
 
-public class GameView extends BorderPane implements EventHandler<Event>, Observer {
+public abstract class GameView extends BorderPane implements EventHandler<Event>, Observer {
 
     private GameController gameController;
     private Jeu jeu;
@@ -22,6 +22,10 @@ public class GameView extends BorderPane implements EventHandler<Event>, Observe
         this.jeu = jeu;
         jeu.addObserver(this);
     }
+
+    protected abstract void loadHomeView();
+    protected abstract void loadInGameView();
+    protected abstract void loadFinishView();
 
     @Override
     public void handle(Event event) {
@@ -34,17 +38,27 @@ public class GameView extends BorderPane implements EventHandler<Event>, Observe
             ScoreView scoreView = (ScoreView) this.lookup("ScoreView");
             scoreView.update(this.jeu.getScore());
         }
+
+        if(o instanceof Jeu && arg.equals("StatusUpdate")) {
+            switch (this.jeu.getStatus()) {
+                case "playing":
+                    this.loadInGameView();
+                    break;
+                case "finished":
+                    this.loadFinishView();
+                    break;
+                default:
+                    this.loadHomeView();
+                    break;
+            }
+        }
     }
+
+
 
     public Jeu getJeu() {
         return jeu;
     }
 
-    protected void setJeu(Jeu jeu) {
-        this.jeu = jeu;
-    }
 
-    public GameController getGameController() {
-        return gameController;
-    }
 }

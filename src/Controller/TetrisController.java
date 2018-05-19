@@ -40,6 +40,8 @@ public class TetrisController extends GameController {
         this.grille = grille;
         super.gameView = tetrisView;
 
+        this.tetris.setNextPieceGrille(new Grille(5,4));
+
         this.currentLevel = 1;
         this.nbPieceLevel = 0;
 
@@ -50,12 +52,26 @@ public class TetrisController extends GameController {
 
     public void start() {
         this.currentPiece = this.generationPiece();
-        this.nextPiece = this.generationPiece();
+
+        this.majNextPiece();
+
         this.currentPiece.setGrille(this.grille);
 
         this.currentPiece.placement(0, 4);
 
+
+        this.tetris.setStatus("playing");
         timer.schedule(nextFrameTask(), 0, 1000/this.currentLevel);
+
+
+    }
+
+    private void majNextPiece() {
+        this.tetris.getNextPieceGrille().clear();
+
+        this.nextPiece = this.generationPiece();
+        this.nextPiece.setGrille(this.tetris.getNextPieceGrille());
+        this.nextPiece.placement(1,1);
 
 
     }
@@ -67,7 +83,7 @@ public class TetrisController extends GameController {
             this.suppressionLigne();
 
             this.currentPiece = this.nextPiece;
-            this.nextPiece = this.generationPiece();
+            this.majNextPiece();
 
 
             this.currentPiece.setGrille(this.grille);
@@ -141,6 +157,7 @@ public class TetrisController extends GameController {
 
     public void finPartie(){
         System.out.println("Fin de partie");
+        this.tetris.setStatus("finished");
     }
 
     private Piece generationPiece() {
@@ -254,7 +271,12 @@ public class TetrisController extends GameController {
                         }
                     });
                 } else {
-                    finPartie();
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            finPartie();
+                        }
+                    });
                     cancel();
                 }
             }

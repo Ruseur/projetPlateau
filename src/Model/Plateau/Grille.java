@@ -91,6 +91,16 @@ public class Grille extends Observable {
         notifyObservers(c);
     }
 
+    public void clear() {
+        for(int i  = 0; i < this.getHauteur(); i++){
+            for(int j  = 0; j < this.getLargeur(); j++){
+                this.grilleCase[i][j] = new Case(i,j);
+                setChanged();
+                notifyObservers(this.grilleCase[i][j]);
+            }
+        }
+    }
+
 
     /**
      * @return the hauteur
