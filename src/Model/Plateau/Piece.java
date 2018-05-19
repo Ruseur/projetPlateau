@@ -99,7 +99,7 @@ public class Piece {
             this.updatePiece();
         } else { //la piece n'a pas pu se placer en entier on libère les pièces
             this.desattribution(this.anciennesCase(newListCase, this.listCase));
-            System.out.println("Pièce n'a pas pu être placée");
+            /*System.out.println("Pièce n'a pas pu être placée");*/
         }
         return placementReussi;
     }
@@ -131,7 +131,7 @@ public class Piece {
             return true;
         } else {
             this.desattribution(this.anciennesCase(newCases, this.listCase));
-            System.out.println("La pièce n'a pas pu être translatée");
+            /*System.out.println("La pièce n'a pas pu être translatée");*/
             return false;
         }
     }

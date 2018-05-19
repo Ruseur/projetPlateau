@@ -11,10 +11,7 @@ import view.TetrisView;
 import javafx.scene.paint.Color;
 
 import java.sql.Time;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
@@ -30,6 +27,7 @@ public class TetrisController extends GameController {
 
     private int currentLevel;
     private int nbPieceLevel;
+
 
     public TetrisController(Plateau plateau){
         super(plateau);
@@ -52,6 +50,7 @@ public class TetrisController extends GameController {
 
     public void start() {
         this.currentPiece = this.generationPiece();
+        this.nextPiece = this.generationPiece();
         this.currentPiece.setGrille(this.grille);
 
         this.currentPiece.placement(0, 4);
@@ -67,7 +66,10 @@ public class TetrisController extends GameController {
             //si elle ne peut pas descendre
             this.suppressionLigne();
 
-            this.currentPiece = this.generationPiece();
+            this.currentPiece = this.nextPiece;
+            this.nextPiece = this.generationPiece();
+
+
             this.currentPiece.setGrille(this.grille);
 
             if(!this.currentPiece.placement(0, 3)){
@@ -194,8 +196,8 @@ public class TetrisController extends GameController {
         listeCouleur.put(5, Color.RED);
         listeCouleur.put(6, Color.YELLOW);
 
+
         double rand = ThreadLocalRandom.current().nextInt(0, listePiece.size());
-        ;
         int[][] dispo = listePiece.get((int) rand);
         Color color = listeCouleur.get((int) rand);
 
@@ -203,13 +205,9 @@ public class TetrisController extends GameController {
         if (this.currentPiece != null) {
             id = this.currentPiece.getId() + 1;
         }
-        /*if(dispo == null){
-            System.out.println("DISPO NULLE");
-            System.out.println(rand);
-        }*/
+
         return new Piece(id, dispo, color);
     }
-
 
     /**
      * Call by @TetrisView

@@ -53,18 +53,6 @@ public class Grille extends Observable {
             }
             y++;
         }
-        for(Case[] ligne : this.getGrilleCase()){
-            for(Case c: ligne){
-                int id=0;
-                if(c.getPiece() !=null){
-                    id = c.getPiece().getId();
-                }
-                /*System.out.print("("+ c.getY()+" "+ c.getX() +")| ");*/
-
-
-            }
-            System.out.println();
-        }
         return nbLignesSuppr;
     }
 
