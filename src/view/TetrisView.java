@@ -60,44 +60,72 @@ public class TetrisView extends GameView{
         BorderPane containerPane = new BorderPane();
 
 
-        containerPane.setTop(this.getInfoBox());
+        containerPane.setTop(this.getInfoView());
 
-        FlowPane gameControllerPane = new FlowPane();
+        containerPane.setCenter(this.getGameControllerView());
 
-        Button play = new Button("Play");
-        play.setOnMouseClicked(this);
+        containerPane.setBottom(this.getInGameControllerView());
 
-        Button pause = new Button("Pause");
-        pause.setOnMouseClicked(this);
+        return containerPane;
+    }
 
-        Button reset = new Button("Reset");
-        reset.setOnMouseClicked(this);
+    private Pane getGameControllerView() {
+        FlowPane gameControllerView = new FlowPane();
+        gameControllerView.setId("GameControllerView");
 
-        gameControllerPane.getChildren().addAll(play,pause,reset);
-        containerPane.setCenter(gameControllerPane);
+        Button playButton = new Button("Play");
+        playButton.setOnMouseClicked(this);
+
+        Button pauseButton = new Button("Pause");
+        pauseButton.setOnMouseClicked(this);
+
+        Button resetButton = new Button("Reset");
+        resetButton.setOnMouseClicked(this);
+
+        String gameStatus = this.jeu.getStatus();
+        switch (gameStatus) {
+            case "playing":
+                playButton.setDisable(true);
+                break;
+            case "paused":
+                pauseButton.setDisable(true);
+                break;
+            case "ended":
+                pauseButton.setDisable(true);
+                resetButton.setDisable(true);
+                break;
+            case "initial":
+                pauseButton.setDisable(true);
+                resetButton.setDisable(true);
+                break;
+
+        }
 
 
-        GridPane tetrisControllerPane = new GridPane();
+        gameControllerView.getChildren().addAll(playButton,pauseButton,resetButton);
+        return gameControllerView;
+    }
+
+    private Pane getInGameControllerView() {
+
+        GridPane inGameControllerView = new GridPane();
         Button left = new Button("Left");
         left.setOnMouseClicked(this);
-        tetrisControllerPane.add(left,0,1);
+        inGameControllerView.add(left,0,1);
 
         Button right = new Button("Right");
         right.setOnMouseClicked(this);
-        tetrisControllerPane.add(right,2,1);
+        inGameControllerView.add(right,2,1);
 
         Button up = new Button("Up");
         up.setOnMouseClicked(this);
-        tetrisControllerPane.add(up,1,0);
+        inGameControllerView.add(up,1,0);
 
         Button down = new Button("Down");
         down.setOnMouseClicked(this);
-        tetrisControllerPane.add(down,1,1);
+        inGameControllerView.add(down,1,1);
 
-
-        containerPane.setBottom(tetrisControllerPane);
-
-        return containerPane;
+        return inGameControllerView;
     }
 
     private Pane getScoreView() {
@@ -121,7 +149,7 @@ public class TetrisView extends GameView{
     }
 
 
-    private VBox getInfoBox() {
+    private VBox getInfoView() {
         VBox vbox = new VBox();
         vbox.setId("InfoView");
         vbox.setPadding(new Insets(10));
