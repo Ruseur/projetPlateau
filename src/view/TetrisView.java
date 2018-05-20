@@ -6,12 +6,14 @@ import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -70,16 +72,20 @@ public class TetrisView extends GameView{
     }
 
     private Pane getGameControllerView() {
-        FlowPane gameControllerView = new FlowPane();
+        VBox gameControllerView = new VBox();
         gameControllerView.setId("GameControllerView");
+        gameControllerView.setAlignment(Pos.CENTER);
 
         Button playButton = new Button("Play");
+        playButton.setMaxWidth(Double.MAX_VALUE);
         playButton.setOnMouseClicked(this);
 
         Button pauseButton = new Button("Pause");
+        pauseButton.setMaxWidth(Double.MAX_VALUE);
         pauseButton.setOnMouseClicked(this);
 
         Button resetButton = new Button("Reset");
+        resetButton.setMaxWidth(Double.MAX_VALUE);
         resetButton.setOnMouseClicked(this);
 
         String gameStatus = this.jeu.getStatus();
@@ -111,19 +117,24 @@ public class TetrisView extends GameView{
         GridPane inGameControllerView = new GridPane();
         Button left = new Button("Left");
         left.setOnMouseClicked(this);
+        left.setMaxWidth(Double.MAX_VALUE);
         inGameControllerView.add(left,0,1);
 
         Button right = new Button("Right");
         right.setOnMouseClicked(this);
+        right.setMaxWidth(Double.MAX_VALUE);
         inGameControllerView.add(right,2,1);
 
         Button up = new Button("Up");
         up.setOnMouseClicked(this);
+        up.setMaxWidth(Double.MAX_VALUE);
         inGameControllerView.add(up,1,0);
 
         Button down = new Button("Down");
         down.setOnMouseClicked(this);
+        down.setMaxWidth(Double.MAX_VALUE);
         inGameControllerView.add(down,1,1);
+        inGameControllerView.setAlignment(Pos.CENTER);
 
         return inGameControllerView;
     }
@@ -178,15 +189,15 @@ public class TetrisView extends GameView{
     private Pane getTopPane() {
 
         HBox hbox = new HBox();
+
+        BackgroundFill backgroundFill = new BackgroundFill(Color.BLUEVIOLET, new CornerRadii(90),new Insets(2));
+        hbox.setBackground(new Background(backgroundFill));
         hbox.setPadding(new Insets(15, 12, 15, 12));
         hbox.setSpacing(10);
         hbox.setAlignment(Pos.CENTER);
-        hbox.setStyle("-fx-background-color: #336699;");
-        Label title = new Label("Tetris");
-        title.setStyle("\n" +
-                "    -fx-font-size: 18px;\n" +
-                "    -fx-font-weight: bold;\n" +
-                "    -fx-text-fill: #333333;");
+
+        Text title = new Text("Tetris");
+        title.setTextAlignment(TextAlignment.CENTER);
         hbox.getChildren().add(title);
 
         return hbox;
