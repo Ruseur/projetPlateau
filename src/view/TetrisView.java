@@ -12,8 +12,8 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-
 import java.util.ArrayList;
+import java.util.Observable;
 
 public class TetrisView extends GameView{
 
@@ -22,17 +22,19 @@ public class TetrisView extends GameView{
 
 
     public TetrisView(TetrisController tetrisController, Tetris tetris) {
-        super(tetrisController, tetris);
-
         this.jeu = tetris;
+        tetris.addObserver(this);
+
         this.tetrisController = tetrisController;
 
+        this.setId("TetrisView");
         this.loadHomeView();
 
         this.setOnKeyPressed(this);
     }
 
     public void loadHomeView() {
+        this.cleanView();
         this.setTop(this.getTopPane());
         this.setCenter(this.getRightPane());
     }
@@ -40,15 +42,16 @@ public class TetrisView extends GameView{
 
     @Override
     public void loadInGameView() {
+        this.cleanView();
         this.setTop(this.getTopPane());
-        this.setCenter(new GrilleView(this.getJeu().getGrille()));
+        this.setCenter(new GrilleView(this.jeu.getGrille()));
         this.setRight(this.getRightPane());
     }
 
     @Override
     protected void loadFinishView() {
+        this.cleanView();
         this.setCenter(new DefaultView("fini"));
-        this.setRight(this.getRightPane());
     }
 
 
@@ -96,8 +99,31 @@ public class TetrisView extends GameView{
 
         return containerPane;
     }
+
+    private Pane getScoreView() {
+        GridPane scoreView = new GridPane();
+        scoreView.setId("ScoreView");
+        Text scoreValue = new Text(Integer.toString(this.jeu.getScore()));
+        scoreValue.setId("ScoreValue");
+        scoreView.add(new Text("Score: "),0,0);
+        scoreView.add(scoreValue,1,0);
+        return scoreView;
+    }
+
+    private Pane getLevelView() {
+        GridPane levelView = new GridPane();
+        levelView.setId("LevelView");
+        Text levelValue = new Text(Integer.toString(this.jeu.getLevel()));
+        levelValue.setId("LevelValue");
+        levelView.add(new Text("Niveau: "),0,0);
+        levelView.add(levelValue,1,0);
+        return levelView;
+    }
+
+
     private VBox getInfoBox() {
         VBox vbox = new VBox();
+        vbox.setId("InfoView");
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(8);
 
@@ -106,10 +132,11 @@ public class TetrisView extends GameView{
         vbox.getChildren().add(title);
 
         ArrayList<Pane> options = new ArrayList<Pane>();
-        options.add(new ScoreView(this.getJeu().getScore()));
 
         if(this.jeu.getStatus().equals("playing")) {
+            options.add(this.getScoreView());
             options.add(new GrilleView(this.jeu.getNextPieceGrille()));
+            options.add(this.getLevelView());
         }
 
         for (Pane option : options) {
@@ -137,6 +164,31 @@ public class TetrisView extends GameView{
         return hbox;
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        if(o instanceof Tetris) {
+            if(arg.equals("ScoreUpdate")) {
+                ((Text) this.lookup("#ScoreValue")).setText(Integer.toString(this.jeu.getScore()));
+            }
+            if(arg.equals("LevelUpdate")) {
+                ((Text)this.lookup("#LevelValue")).setText(Integer.toString(this.jeu.getLevel()));
+            }
+
+            if(arg.equals("StatusUpdate")) {
+                switch (this.jeu.getStatus()) {
+                    case "playing":
+                        this.loadInGameView();
+                        break;
+                    case "finished":
+                        this.loadFinishView();
+                        break;
+                    default:
+                        this.loadHomeView();
+                        break;
+                }
+            }
+        }
+    }
 
     @Override
     public void handle(Event event) {

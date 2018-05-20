@@ -34,11 +34,9 @@ public class TetrisController extends GameController {
 
         Grille grille = new Grille(10,20);
         Tetris tetris = new Tetris(grille);
-        TetrisView tetrisView = new TetrisView(this, tetris);
         this.tetris = tetris;
         this.perdu = false;
         this.grille = grille;
-        super.gameView = tetrisView;
 
         this.tetris.setNextPieceGrille(new Grille(5,4));
 
@@ -46,6 +44,8 @@ public class TetrisController extends GameController {
         this.nbPieceLevel = 0;
 
         this.timer = new Timer();
+
+        super.gameView = new TetrisView(this, tetris);
     }
 
 
