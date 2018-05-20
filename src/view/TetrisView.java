@@ -38,7 +38,7 @@ public class TetrisView extends GameView{
     public void loadHomeView() {
         this.cleanView();
         this.setTop(this.getTopPane());
-        this.setCenter(this.getRightPane());
+        this.setCenter(this.getGameControllerView());
     }
 
 
@@ -53,7 +53,8 @@ public class TetrisView extends GameView{
     @Override
     protected void loadFinishView() {
         this.cleanView();
-        this.setCenter(new DefaultView("fini"));
+        this.setTop(this.getTopPane());
+        this.setCenter(this.getGameControllerView());
     }
 
 
