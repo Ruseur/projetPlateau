@@ -39,7 +39,8 @@ public class TetrisView extends GameView{
     public void loadHomeView() {
         this.cleanView();
         this.setTop(this.getTopPane());
-        this.setCenter(this.getGameControllerView());
+        this.setCenter(this.getBestScoresView());
+        this.setBottom(this.getGameControllerView());
     }
 
 
@@ -72,10 +73,10 @@ public class TetrisView extends GameView{
         bestScoreView.setId("BestScoreView");
         bestScoreView.setAlignment(Pos.CENTER);
 
-        ArrayList<String> bestScores = this.tetrisController.getScores();
-
-        for (String score : bestScores) {
-            bestScoreView.getChildren().add(new Text(score));
+        ArrayList<String> bestScores = this.tetrisController.getSavedScores();
+        for (String bestScore : bestScores) {
+            String[] splittedScore = bestScore.split(":");
+            bestScoreView.getChildren().add(new Text(splittedScore[0] + " - " + splittedScore[1]));
         }
 
         return bestScoreView;
@@ -218,7 +219,7 @@ public class TetrisView extends GameView{
     @Override
     public void update(Observable o, Object arg) {
         if(o instanceof Tetris) {
-            if(arg.equals("LevelUpdate")) {
+            if(arg.equals("LevelUpdate") && this.jeu.getStatus().equals("playing")) {
                 ((Text)this.lookup("#LevelValue")).setText(Integer.toString(this.jeu.getLevel()));
             }
 
@@ -241,7 +242,7 @@ public class TetrisView extends GameView{
         }
 
         if(o instanceof Joueur) {
-            if(arg.equals("ScoreUpdate")) {
+            if(arg.equals("ScoreUpdate") && this.jeu.getStatus().equals("playing")) {
                 ((Text) this.lookup("#ScoreValue")).setText(Integer.toString(this.jeu.getJoueur().getScore()));
             }
         }

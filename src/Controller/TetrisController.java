@@ -3,19 +3,17 @@ package Controller;
 import Controller.service.TextParser;
 import Model.Jeu.Tetris;
 import Model.Joueur.Joueur;
-import Model.Plateau.Case;
 import Model.Plateau.Grille;
 import Model.Plateau.Piece;
 import javafx.application.Platform;
 import Model.Plateau.Plateau;
+import jdk.nashorn.internal.ir.WhileNode;
 import view.TetrisView;
 
 import javafx.scene.paint.Color;
 
-import java.sql.Time;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
 
 public class TetrisController extends GameController {
@@ -162,6 +160,7 @@ public class TetrisController extends GameController {
 
     public void finPartie(){
         System.out.println("Fin de partie");
+        this.saveScore();
         this.jeu.setStatus("finished");
         this.reset();
 
@@ -321,9 +320,37 @@ public class TetrisController extends GameController {
         };
     }
 
-    public ArrayList<String> getScores(){
+    public ArrayList<String> getSavedScores(){
         TextParser tp = new TextParser("scoresTetris.txt");
         return tp.readAll();
+    }
+
+    public void saveScore(){
+        int currentScore = this.jeu.getJoueur().getScore();
+
+
+        ArrayList<String> bestScores = this.getSavedScores();
+
+        boolean isAdded = false;
+        int i = 0;
+        int maxIndex = bestScores.size();
+
+        do {
+            String[] score = bestScores.get(i).split(":");
+            if(currentScore > Integer.parseInt(score[1])) {
+                bestScores.add(i, this.jeu.getJoueur().getNom()+":"+Integer.toString(currentScore));
+                isAdded = true;
+            } else {
+                i++;
+                if(i == maxIndex) {
+                    bestScores.add(i, this.jeu.getJoueur().getNom()+":"+Integer.toString(currentScore));
+                    isAdded = true;
+                }
+            }
+        } while(!isAdded);
+
+        TextParser tp = new TextParser("scoresTetris.txt");
+        tp.write(bestScores);
     }
 }
 
