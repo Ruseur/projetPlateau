@@ -159,17 +159,6 @@ public class BlokusView extends GameView{
     }
 
 
-    private Pane getScoreView() {
-        GridPane scoreView = new GridPane();
-        scoreView.setId("ScoreView");
-        Text scoreValue = new Text(Integer.toString(this.jeu.getScore()));
-        scoreValue.setId("ScoreValue");
-        scoreView.add(new Text("Score: "),0,0);
-        scoreView.add(scoreValue,1,0);
-        return scoreView;
-    }
-
-
     private VBox getInfoView() {
         VBox vbox = new VBox();
         vbox.setId("InfoView");

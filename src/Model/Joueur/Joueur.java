@@ -33,6 +33,8 @@ public class Joueur extends Observable {
 
     public void setScore(int score) {
         this.score = score;
+        setChanged();
+        notifyObservers("ScoreUpdate");
     }
 
     public String getStatus() {

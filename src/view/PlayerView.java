@@ -29,7 +29,10 @@ public class PlayerView extends HBox implements Observer{
     public PlayerView(Joueur joueur){
         Text text = new Text(joueur.getNom() + " - " + Integer.toString(joueur.getScore()));
         text.setId("Player"+joueur.getNom());
-        text.setFill(joueur.getColor());
+
+        if(joueur.getColor() != null)
+            text.setFill(joueur.getColor());
+
         this.getChildren().add(text);
         joueur.addObserver(this);
     }

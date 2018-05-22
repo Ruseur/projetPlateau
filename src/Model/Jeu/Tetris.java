@@ -1,10 +1,11 @@
 package Model.Jeu;
 
+import Model.Joueur.Joueur;
 import Model.Plateau.Grille;
-import Model.Plateau.Piece;
 
 public class Tetris extends Jeu{
 
+    private Joueur joueur;
     private Grille nextPieceGrille;
 
     public Tetris(){}
@@ -23,4 +24,11 @@ public class Tetris extends Jeu{
         notifyObservers(nextPieceGrille);
     }
 
+    public Joueur getJoueur() {
+        return joueur;
+    }
+
+    public void setJoueur(Joueur joueur) {
+        this.joueur = joueur;
+    }
 }

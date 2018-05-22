@@ -8,7 +8,6 @@ public class Jeu extends Observable {
     // "playing" "paused" "initial" "finished"
     private String status = "initial";
     private Grille grille;
-    private int Score = 0;
     private int level;
 
     public Grille getGrille() {
@@ -17,16 +16,6 @@ public class Jeu extends Observable {
 
     public void setGrille(Grille grille) {
         this.grille = grille;
-    }
-
-    public int getScore() {
-        return Score;
-    }
-
-    public void setScore(int score) {
-        Score = score;
-        setChanged();
-        notifyObservers("ScoreUpdate");
     }
 
     public String getStatus() {

@@ -2,6 +2,7 @@ package view;
 
 import Controller.TetrisController;
 import Model.Jeu.Tetris;
+import Model.Joueur.Joueur;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -71,14 +72,10 @@ public class TetrisView extends GameView{
         bestScoreView.setId("BestScoreView");
         bestScoreView.setAlignment(Pos.CENTER);
 
-        ArrayList<Integer> bestScores = new ArrayList<Integer>();
+        ArrayList<String> bestScores = this.tetrisController.getScores();
 
-        bestScores.add(10);
-        bestScores.add(20);
-        bestScores.add(12);
-
-        for (Integer score : bestScores) {
-            bestScoreView.getChildren().add(new Text(Integer.toString(score)));
+        for (String score : bestScores) {
+            bestScoreView.getChildren().add(new Text(score));
         }
 
         return bestScoreView;
@@ -153,9 +150,11 @@ public class TetrisView extends GameView{
     }
 
     private Pane getScoreView() {
+        this.jeu.getJoueur().addObserver(this);
+
         GridPane scoreView = new GridPane();
         scoreView.setId("ScoreView");
-        Text scoreValue = new Text(Integer.toString(this.jeu.getScore()));
+        Text scoreValue = new Text(Integer.toString(this.jeu.getJoueur().getScore()));
         scoreValue.setId("ScoreValue");
         scoreView.add(new Text("Score: "),0,0);
         scoreView.add(scoreValue,1,0);
@@ -219,9 +218,6 @@ public class TetrisView extends GameView{
     @Override
     public void update(Observable o, Object arg) {
         if(o instanceof Tetris) {
-            if(arg.equals("ScoreUpdate")) {
-                ((Text) this.lookup("#ScoreValue")).setText(Integer.toString(this.jeu.getScore()));
-            }
             if(arg.equals("LevelUpdate")) {
                 ((Text)this.lookup("#LevelValue")).setText(Integer.toString(this.jeu.getLevel()));
             }
@@ -241,6 +237,12 @@ public class TetrisView extends GameView{
                         this.loadHomeView();
                         break;
                 }
+            }
+        }
+
+        if(o instanceof Joueur) {
+            if(arg.equals("ScoreUpdate")) {
+                ((Text) this.lookup("#ScoreValue")).setText(Integer.toString(this.jeu.getJoueur().getScore()));
             }
         }
     }

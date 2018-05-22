@@ -2,6 +2,7 @@ package Controller;
 
 import Controller.service.TextParser;
 import Model.Jeu.Tetris;
+import Model.Joueur.Joueur;
 import Model.Plateau.Case;
 import Model.Plateau.Grille;
 import Model.Plateau.Piece;
@@ -51,7 +52,7 @@ public class TetrisController extends GameController {
 
 
     public void start() {
-        this.getScores();
+        this.jeu.setJoueur(new Joueur("Tom"));
 
         this.currentPiece = this.generationPiece();
 
@@ -155,7 +156,7 @@ public class TetrisController extends GameController {
         int nbLignesSuppr = this.grille.suppressionLigne();
         if(nbLignesSuppr != 0){
             int points = (int) (10* Math.pow(nbLignesSuppr, 2));
-            this.jeu.setScore(this.jeu.getScore()+points);
+            this.jeu.getJoueur().setScore(this.jeu.getJoueur().getScore()+points);
         }
     }
 
@@ -170,17 +171,14 @@ public class TetrisController extends GameController {
 
         //Grille grille = new Grille(10,20);
         this.grille.clear();
-        this.jeu = jeu;
         this.perdu = false;
 
-        this.jeu.setScore(0);
+        this.jeu.getJoueur().setScore(0);
         this.jeu.setLevel(1);
         this.nbPieceLevel = 0;
 
         this.timer.cancel();
         this.timer = new Timer();
-
-        this.start();
     }
 
     public void resume(){
@@ -278,6 +276,7 @@ public class TetrisController extends GameController {
                 break;
             case "Reset":
                 this.reset();
+                this.start();
                 break;
             case "Left":
                 if(this.jeu.getStatus().equals("playing"))
