@@ -3,10 +3,13 @@ package view;
 import Controller.TetrisController;
 import Model.Jeu.Tetris;
 import Model.Joueur.Joueur;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -18,7 +21,7 @@ import javafx.scene.text.TextAlignment;
 import java.util.ArrayList;
 import java.util.Observable;
 
-public class TetrisView extends GameView{
+public class TetrisView extends GameView implements EventHandler<Event> {
 
     private Tetris jeu;
     private TetrisController tetrisController;
@@ -39,7 +42,11 @@ public class TetrisView extends GameView{
     public void loadHomeView() {
         this.cleanView();
         this.setTop(this.getTopPane());
-        this.setCenter(this.getBestScoresView());
+
+        VBox body = new VBox();
+        body.getChildren().addAll(this.getPlayerView(), this.getBestScoresView());
+
+        this.setCenter(body);
         this.setBottom(this.getGameControllerView());
     }
 
@@ -68,15 +75,57 @@ public class TetrisView extends GameView{
         this.setBottom(this.getGameControllerView());
     }
 
+    private Pane getPlayerView() {
+        VBox playerView = new VBox();
+        playerView.setPadding(new Insets(10));
+        playerView.setSpacing(8);
+        playerView.setAlignment(Pos.CENTER);
+
+        if(this.jeu.getJoueur() != null) {
+            Text title = new Text("Hello "+ this.jeu.getJoueur().getNom()+" !");
+            title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+            playerView.getChildren().add(title);
+        } else {
+            Text title = new Text("Who are you ?");
+            title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+            playerView.getChildren().add(title);
+
+            HBox playerActionBox = new HBox();
+            playerActionBox.setAlignment(Pos.CENTER);
+            TextField playerNameField = new TextField();
+            playerNameField.setId("PlayerNameField");
+            Button confirmButton = new Button("Confirm");
+            confirmButton.setId("PlayerNameConfirm");
+            confirmButton.setOnMouseClicked(this);
+
+            playerActionBox.getChildren().addAll(playerNameField,confirmButton);
+            playerView.getChildren().add(playerActionBox);
+        }
+
+        return playerView;
+    }
+
     private Pane getBestScoresView() {
         VBox bestScoreView = new VBox();
         bestScoreView.setId("BestScoreView");
         bestScoreView.setAlignment(Pos.CENTER);
 
+        bestScoreView.setPadding(new Insets(10));
+        bestScoreView.setSpacing(8);
+
+        Text title = new Text("Best Scores");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        bestScoreView.getChildren().add(title);
+
         ArrayList<String> bestScores = this.tetrisController.getSavedScores();
-        for (String bestScore : bestScores) {
-            String[] splittedScore = bestScore.split(":");
-            bestScoreView.getChildren().add(new Text(splittedScore[0] + " - " + splittedScore[1]));
+        if(bestScores.size() == 0) {
+            Text text = new Text("No scores yet ! :(");
+            bestScoreView.getChildren().add(text);
+        } else {
+            for (String bestScore : bestScores) {
+                String[] splittedScore = bestScore.split(":");
+                bestScoreView.getChildren().add(new Text(splittedScore[0] + " - " + splittedScore[1]));
+            }
         }
 
         return bestScoreView;
@@ -90,6 +139,7 @@ public class TetrisView extends GameView{
         Button playButton = new Button("Play");
         playButton.setMaxWidth(Double.MAX_VALUE);
         playButton.setOnMouseClicked(this);
+        if(this.jeu.getJoueur() == null) playButton.setDisable(true);
 
         Button resumeButton = new Button("Resume");
         resumeButton.setMaxWidth(Double.MAX_VALUE);
@@ -222,6 +272,9 @@ public class TetrisView extends GameView{
             if(arg.equals("LevelUpdate") && this.jeu.getStatus().equals("playing")) {
                 ((Text)this.lookup("#LevelValue")).setText(Integer.toString(this.jeu.getLevel()));
             }
+            if(arg.equals("PlayerUpdate")) {
+                this.loadHomeView();
+            }
 
             if(arg.equals("StatusUpdate")) {
                 switch (this.jeu.getStatus()) {
@@ -286,6 +339,9 @@ public class TetrisView extends GameView{
                 break;
             case "Down":
                 this.tetrisController.command("Down");
+                break;
+            case "Confirm":
+                this.tetrisController.setJoueur(((TextField)this.lookup("#PlayerNameField")).getText());
                 break;
             default:
                 break;

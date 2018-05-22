@@ -50,8 +50,6 @@ public class TetrisController extends GameController {
 
 
     public void start() {
-        this.jeu.setJoueur(new Joueur("Tom"));
-
         this.currentPiece = this.generationPiece();
 
         this.majNextPiece();
@@ -335,22 +333,27 @@ public class TetrisController extends GameController {
         int i = 0;
         int maxIndex = bestScores.size();
 
-        do {
-            String[] score = bestScores.get(i).split(":");
-            if(currentScore > Integer.parseInt(score[1])) {
+        while(!isAdded){
+            if(i == maxIndex) {
                 bestScores.add(i, this.jeu.getJoueur().getNom()+":"+Integer.toString(currentScore));
                 isAdded = true;
             } else {
-                i++;
-                if(i == maxIndex) {
-                    bestScores.add(i, this.jeu.getJoueur().getNom()+":"+Integer.toString(currentScore));
+                String[] score = bestScores.get(i).split(":");
+                if (currentScore > Integer.parseInt(score[1])) {
+                    bestScores.add(i, this.jeu.getJoueur().getNom() + ":" + Integer.toString(currentScore));
                     isAdded = true;
+                } else {
+                    i++;
                 }
             }
-        } while(!isAdded);
+        }
 
         TextParser tp = new TextParser("scoresTetris.txt");
         tp.write(bestScores);
+    }
+
+    public void setJoueur(String nom) {
+        this.jeu.setJoueur(new Joueur(nom));
     }
 }
 

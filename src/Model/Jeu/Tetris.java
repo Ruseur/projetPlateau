@@ -30,5 +30,7 @@ public class Tetris extends Jeu{
 
     public void setJoueur(Joueur joueur) {
         this.joueur = joueur;
+        setChanged();
+        notifyObservers("PlayerUpdate");
     }
 }
