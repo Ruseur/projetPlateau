@@ -1,9 +1,8 @@
 package Controller;
 
 import Model.Plateau.Plateau;
-import javafx.scene.layout.Pane;
 import view.BoardView;
-import view.GameView;
+import view.DefaultView;
 
 public class BoardController {
     private BoardView boardView;
@@ -18,7 +17,14 @@ public class BoardController {
         switch (gameName) {
             case "Tetris":
                 TetrisController tetrisController = new TetrisController(this.plateau);
-                this.boardView.setGameView(tetrisController.getGameView());
+                this.boardView.setBody(tetrisController.getGameView());
+                break;
+            case "Blokus":
+                BlokusController blokusController = new BlokusController(this.plateau);
+                this.boardView.setBody(blokusController.getGameView());
+                break;
+            default:
+                this.boardView.setBody(new DefaultView("Not implemented yet !"));
                 break;
         }
     }

@@ -14,7 +14,6 @@ public class Main extends Application {
 
         primaryStage.setTitle("Amazing Board Games !");
         primaryStage.setScene(scene);
-        //primaryStage.setResizable(false);
         primaryStage.show();
     }
 

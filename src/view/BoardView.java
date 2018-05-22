@@ -1,8 +1,6 @@
 package view;
 
 import Controller.BoardController;
-import Controller.GameController;
-import Model.Jeu.Tetris;
 import Model.Plateau.Plateau;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -11,7 +9,6 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
@@ -74,8 +71,11 @@ public class BoardView extends BorderPane implements EventHandler, Observer {
                 case "Tetris":
                     this.boardController.changeGame("Tetris");
                     break;
-                default:
-                    this.setCenter(new DefaultView("Not implemented yet !"));
+                case "Blokus":
+                    this.boardController.changeGame("Blokus");
+                    break;
+                case "Puzzle":
+                    this.boardController.changeGame("Puzzle");
                     break;
             }
         }
@@ -86,7 +86,7 @@ public class BoardView extends BorderPane implements EventHandler, Observer {
 
     }
 
-    public void setGameView(GameView gameView) {
-        this.setCenter(gameView);
+    public void setBody(Pane body) {
+        this.setCenter(body);
     }
 }
