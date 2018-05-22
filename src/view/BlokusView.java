@@ -4,10 +4,13 @@ import Controller.BlokusController;
 import Model.Jeu.Blokus;
 import Model.Jeu.Tetris;
 import Model.Joueur.Joueur;
+import Model.Plateau.Piece;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -17,6 +20,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Observable;
 
 public class BlokusView extends GameView{
@@ -56,10 +60,28 @@ public class BlokusView extends GameView{
         rightPane.setCenter(this.getGameControllerView());
 
 
-        GrilleView playerGrilleView = new GrilleView(this.jeu.getCurrentGridPlayer());
-        playerGrilleView.setId("PlayerGrilleView");
-        rightPane.setBottom(playerGrilleView);
+        rightPane.setBottom(this.getPlayerPiecesView());
         this.setRight(rightPane);
+    }
+
+    private Pane getPlayerPiecesView() {
+        FlowPane playerPiecesView = new FlowPane();
+        playerPiecesView.setId("PlayerPiecesView");
+
+        playerPiecesView.setHgap(8);
+        playerPiecesView.setVgap(8);
+        playerPiecesView.getChildren().addAll(this.getCurrentPlayerPiecesView());
+        playerPiecesView.setAlignment(Pos.CENTER);
+
+        return playerPiecesView;
+    }
+
+    private ArrayList<PieceView> getCurrentPlayerPiecesView() {
+        ArrayList<PieceView> currentPlayerPiecesView = new ArrayList<>();
+        for(Piece piece : this.jeu.getCurrentPlayerPieces()) {
+            currentPlayerPiecesView.add(new PieceView(piece));
+        }
+        return currentPlayerPiecesView;
     }
 
     @Override
@@ -194,6 +216,11 @@ public class BlokusView extends GameView{
                 GrilleView playerGrilleView = ((GrilleView) this.lookup("#PlayerGrilleView"));
                 playerGrilleView.getChildren().removeAll(playerGrilleView.getChildren());
                 playerGrilleView.generateGrid(this.jeu.getCurrentGridPlayer());
+            }
+            if(arg.equals("PlayerPiecesUpdate") && this.jeu.getStatus().equals("playing")) {
+                FlowPane playerPiecesView = ((FlowPane) this.lookup("#PlayerPiecesView"));
+                playerPiecesView.getChildren().removeAll(playerPiecesView.getChildren());
+                playerPiecesView.getChildren().addAll(this.getCurrentPlayerPiecesView());
             }
 
             if(arg.equals("StatusUpdate")) {

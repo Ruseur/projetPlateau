@@ -17,18 +17,17 @@ public class BlokusController extends GameController {
     private Grille grille;
     private ArrayList<Joueur> players = new ArrayList<>();
     private ArrayList<Piece> pieces = new ArrayList<>();
-    private ArrayList<Grille> gridByPlayers = new ArrayList<>();
     private ArrayList<Color> availableColors = new ArrayList<>();
 
 
 
     public BlokusController(Plateau plateau){
         super(plateau);
-        this.setPieces();
+        this.addPieces();
 
         availableColors.add(Color.BLUE);
         availableColors.add(Color.GREEN);
-        availableColors.add(Color.YELLOW);
+        availableColors.add(Color.HOTPINK);
         availableColors.add(Color.RED);
 
         Grille grille = new Grille(20,20);
@@ -44,34 +43,39 @@ public class BlokusController extends GameController {
         this.blokus.addPlayer(new Joueur("Tutu"));
         this.blokus.addPlayer(new Joueur("Titi"));
 
-        for(Joueur player : this.blokus.getPlayers()) {
-            gridByPlayers.add(this.getPlayerGrid(player));
-        }
 
+        Random random = new Random();
+
+        ArrayList<ArrayList<Piece>> playersPieces = new ArrayList<>();
+        for(Joueur player : this.blokus.getPlayers()) {
+            int index = random.nextInt(this.availableColors.size());
+
+            Color color = this.availableColors.get(index);
+            this.availableColors.remove(index);
+            player.setColor(color);
+            playersPieces.add(this.getPiecesWithColor(color));
+        }
+        this.blokus.setPlayersPieces(playersPieces);
 
         super.gameView = new BlokusView(this, blokus);
     }
 
-    private Grille getPlayerGrid(Joueur player) {
-        Grille grid = new Grille(20,20);
-        Random random = new Random();
-        int index = random.nextInt(this.availableColors.size());
 
-        Color color = this.availableColors.get(index);
-        this.availableColors.remove(index);
+    private ArrayList<Piece> getPiecesWithColor(Color color) {
+        ArrayList<Piece> playerPiece = new ArrayList<>();
+
 
         for(Piece piece: this.pieces) {
 
             Piece currentPiece = new Piece(piece.getId(),piece.getDisposition(),color);
-            currentPiece.setGrille(grid);
-            currentPiece.testPlacement(0,0);
+            playerPiece.add(currentPiece);
 
         }
 
-        return grid;
+        return playerPiece;
     }
 
-    private void setPieces() {
+    private void addPieces() {
         this.pieces.add(new Piece(0,
                         new int[][]{
                                 {1,1,1,1}
@@ -127,6 +131,46 @@ public class BlokusController extends GameController {
                         Color.RED
                 )
         );
+        this.pieces.add(new Piece(7,
+                        new int[][]{
+                                {1, 0, 0},
+                                {1, 1, 1}
+                        },
+                        Color.RED
+                )
+        );
+        this.pieces.add(new Piece(8,
+                        new int[][]{
+                                {0, 0, 1},
+                                {1, 1, 1}
+                        },
+                        Color.RED
+                )
+        );
+        this.pieces.add(new Piece(9,
+                        new int[][]{
+                                {0, 1, 0},
+                                {1, 1, 1}
+                        },
+                        Color.RED
+                )
+        );
+        this.pieces.add(new Piece(10,
+                        new int[][]{
+                                {0, 0, 1},
+                                {1, 1, 1}
+                        },
+                        Color.RED
+                )
+        );
+        this.pieces.add(new Piece(11,
+                        new int[][]{
+                                {0, 1, 0},
+                                {1, 1, 1}
+                        },
+                        Color.RED
+                )
+        );
     }
 
 
@@ -135,15 +179,16 @@ public class BlokusController extends GameController {
 
         this.players = this.blokus.getPlayers();
         this.blokus.setCurrentPlayer(this.players.get(0));
-        this.blokus.setCurrentGridPlayer(this.gridByPlayers.get(0));
+
+        this.blokus.setCurrentPlayerPieces(this.blokus.getPlayersPieces().get(0));
+
         this.blokus.setStatus("playing");
     }
 
     public void next() {
         int nextPlayerIndex = this.blokus.getNextPlayerIndex();
         this.blokus.setCurrentPlayer(this.blokus.getPlayers().get(nextPlayerIndex));
-        this.blokus.setCurrentGridPlayer(this.gridByPlayers.get(nextPlayerIndex));
-
+        this.blokus.setCurrentPlayerPieces(this.blokus.getPlayersPieces().get(nextPlayerIndex));
     }
 
     public void rotation() {

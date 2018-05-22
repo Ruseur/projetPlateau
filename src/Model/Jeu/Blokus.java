@@ -10,7 +10,9 @@ public class Blokus extends Jeu {
 
     private ArrayList<Joueur> players;
     private ArrayList<Piece> pieces;
+    private ArrayList<ArrayList<Piece>> playersPieces;
     private Joueur currentPlayer;
+    private ArrayList<Piece> currentPlayerPieces;
     private Grille currentGridPlayer;
 
     public Blokus(Grille grille) {
@@ -74,5 +76,23 @@ public class Blokus extends Jeu {
         this.currentGridPlayer = currentGridPlayer;
         setChanged();
         notifyObservers("PlayerGridUpdate");
+    }
+
+    public ArrayList<Piece> getCurrentPlayerPieces() {
+        return currentPlayerPieces;
+    }
+
+    public void setCurrentPlayerPieces(ArrayList<Piece> currentPlayerPieces) {
+        this.currentPlayerPieces = currentPlayerPieces;
+        setChanged();
+        notifyObservers("PlayerPiecesUpdate");
+    }
+
+    public ArrayList<ArrayList<Piece>> getPlayersPieces() {
+        return playersPieces;
+    }
+
+    public void setPlayersPieces(ArrayList<ArrayList<Piece>> playersPieces) {
+        this.playersPieces = playersPieces;
     }
 }
