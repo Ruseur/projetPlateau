@@ -3,6 +3,7 @@ package view;
 import Controller.BlokusController;
 import Model.Jeu.Blokus;
 import Model.Jeu.Tetris;
+import Model.Joueur.Joueur;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -53,6 +54,11 @@ public class BlokusView extends GameView{
         BorderPane rightPane = new BorderPane();
         rightPane.setTop(this.getInfoView());
         rightPane.setCenter(this.getGameControllerView());
+
+
+
+
+        rightPane.setBottom(new GrilleView(this.jeu.getCurrentGridPlayer()));
         this.setRight(rightPane);
     }
 
@@ -117,6 +123,15 @@ public class BlokusView extends GameView{
         return gameControllerView;
     }
 
+    private Pane getInGameControllerView() {
+
+        BorderPane inGameControllerView = new BorderPane();
+
+        this.setCenter(new GrilleView(this.jeu.getCurrentGridPlayer()));
+
+        return inGameControllerView;
+    }
+
 
     private Pane getScoreView() {
         GridPane scoreView = new GridPane();
@@ -128,18 +143,6 @@ public class BlokusView extends GameView{
         return scoreView;
     }
 
-    private Pane getLevelView() {
-        GridPane levelView = new GridPane();
-        levelView.setId("LevelView");
-
-        Text levelValue = new Text(Integer.toString(this.jeu.getLevel()));
-        levelValue.setId("LevelValue");
-
-        levelView.add(new Text("Niveau: "),0,0);
-        levelView.add(levelValue,1,0);
-        return levelView;
-    }
-
 
     private VBox getInfoView() {
         VBox vbox = new VBox();
@@ -147,21 +150,18 @@ public class BlokusView extends GameView{
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(8);
 
-        Text title = new Text("Info");
+        Text title = new Text("Joueurs");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         vbox.getChildren().add(title);
 
-        ArrayList<Pane> options = new ArrayList<Pane>();
-
-        if(this.jeu.getStatus().equals("playing")) {
-            options.add(this.getScoreView());
-            options.add(this.getLevelView());
+        VBox playersView = new VBox();
+        for(Joueur player : this.jeu.getPlayers()) {
+            playersView.getChildren().add(new PlayerView(player));
         }
+        VBox.setMargin(playersView, new Insets(0, 0, 0, 8));
 
-        for (Pane option : options) {
-            VBox.setMargin(option, new Insets(0, 0, 0, 8));
-            vbox.getChildren().add(option);
-        }
+        vbox.getChildren().add(playersView);
+
 
         return vbox;
     }

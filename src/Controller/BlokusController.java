@@ -5,7 +5,6 @@ import Model.Joueur.Joueur;
 import Model.Plateau.Grille;
 import Model.Plateau.Piece;
 import Model.Plateau.Plateau;
-import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import view.BlokusView;
 
@@ -17,29 +16,125 @@ public class BlokusController extends GameController {
 
     private Blokus blokus;
     private Grille grille;
-    private ArrayList<Joueur> players;
+    private ArrayList<Joueur> players = new ArrayList<>();
+    private ArrayList<Piece> pieces = new ArrayList<>();
+    private ArrayList<Grille> gridByPlayers = new ArrayList<>();
+    private ArrayList<Color> availableColors = new ArrayList<>();
 
 
 
     public BlokusController(Plateau plateau){
         super(plateau);
+        this.setPieces();
+
+        availableColors.add(Color.LEMONCHIFFON);
+        availableColors.add(Color.SANDYBROWN);
+        availableColors.add(Color.CHARTREUSE);
+        availableColors.add(Color.NAVAJOWHITE);
 
         Grille grille = new Grille(20,20);
         Blokus blokus = new Blokus(grille);
+
+        blokus.setPieces(this.pieces);
+
         this.blokus = blokus;
         this.grille = grille;
 
+        this.blokus.addJoueur(new Joueur("Toto"));
+        this.blokus.addJoueur(new Joueur("Tata"));
+        this.blokus.addJoueur(new Joueur("Tutu"));
+        this.blokus.addJoueur(new Joueur("Titi"));
+
+        for(Joueur player : this.blokus.getPlayers()) {
+            gridByPlayers.add(this.getPlayerGrid(player));
+        }
+
+
         super.gameView = new BlokusView(this, blokus);
+    }
+
+    private Grille getPlayerGrid(Joueur player) {
+        Grille grid = new Grille(10,10);
+        Random random = new Random();
+        int index = random.nextInt(this.availableColors.size());
+
+        Color color = this.availableColors.get(index);
+        this.availableColors.remove(index);
+
+        for(Piece piece: this.pieces) {
+
+            grid.addPiece(new Piece(piece.getId(),piece.getDisposition(),color));
+
+        }
+
+        return grid;
+    }
+
+    private void setPieces() {
+        this.pieces.add(new Piece(0,
+                        new int[][]{
+                                {1,1,1,1}
+                        },
+                        Color.RED
+                )
+        );
+        this.pieces.add(new Piece(1,
+                        new int[][]{
+                                {1, 1},
+                                {1, 1},
+                        },
+                        Color.RED
+                )
+        );
+        this.pieces.add(new Piece(2,
+                        new int[][]{
+                                {1, 1, 0},
+                                {0, 1, 1}
+                        },
+                        Color.RED
+                )
+        );
+        this.pieces.add(new Piece(3,
+                        new int[][]{
+                                {0, 1, 1},
+                                {1, 1, 0}
+                        },
+                        Color.RED
+                )
+        );
+        this.pieces.add(new Piece(4,
+                        new int[][]{
+                                {1, 0, 0},
+                                {1, 1, 1}
+                        },
+                        Color.RED
+                )
+        );
+        this.pieces.add(new Piece(5,
+                        new int[][]{
+                                {0, 0, 1},
+                                {1, 1, 1}
+                        },
+                        Color.RED
+                )
+        );
+        this.pieces.add(new Piece(6,
+                        new int[][]{
+                                {0, 1, 0},
+                                {1, 1, 1}
+                        },
+                        Color.RED
+                )
+        );
     }
 
 
     public void start() {
 
-        Joueur joueur = new Joueur();
-        this.blokus.addJoueur(joueur);
 
         this.players = this.blokus.getPlayers();
-
+        this.blokus.setCurrentPlayer(this.players.get(0));
+        this.blokus.setCurrentGridPlayer(this.gridByPlayers.get(0));
         this.blokus.setStatus("playing");
     }
 
@@ -58,69 +153,6 @@ public class BlokusController extends GameController {
     public void finPartie(){
         System.out.println("Fin de partie");
         this.blokus.setStatus("finished");
-    }
-
-    private Piece generationPiece() {
-        Map<Integer, int[][]> listePiece = new HashMap<>();
-        Map<Integer, Color> listeCouleur = new HashMap<>();
-        listePiece.put(0,
-                new int[][]{
-                        {1,1,1,1}
-                }
-        );
-        listePiece.put(1,
-                new int[][]{
-                        {1, 1},
-                        {1, 1},
-                }
-        );
-        listePiece.put(2,
-                new int[][]{
-                        {1, 1, 0},
-                        {0, 1, 1}
-                }
-        );
-        listePiece.put(3,
-                new int[][]{
-                        {0, 1, 1},
-                        {1, 1, 0}
-                }
-        );
-        listePiece.put(4,
-                new int[][]{
-                        {1, 0, 0},
-                        {1, 1, 1}
-                }
-        );
-        listePiece.put(5,
-                new int[][]{
-                        {0, 0, 1},
-                        {1, 1, 1}
-                }
-        );
-        listePiece.put(6,
-                new int[][]{
-                        {0, 1, 0},
-                        {1, 1, 1}
-                }
-        );
-
-        listeCouleur.put(0, Color.DARKCYAN);
-        listeCouleur.put(1, Color.BLUE);
-        listeCouleur.put(2, Color.MAGENTA);
-        listeCouleur.put(3, Color.CYAN);
-        listeCouleur.put(4, Color.CHARTREUSE);
-        listeCouleur.put(5, Color.RED);
-        listeCouleur.put(6, Color.YELLOW);
-
-
-        double rand = ThreadLocalRandom.current().nextInt(0, listePiece.size());
-        int[][] dispo = listePiece.get((int) rand);
-        Color color = listeCouleur.get((int) rand);
-
-        int id = 1;
-
-        return new Piece(id, dispo, color);
     }
 
     /**

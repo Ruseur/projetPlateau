@@ -236,4 +236,6 @@ public class Piece extends Observable {
     public Color getColor() {
         return color;
     }
+
+    public int[][] getDisposition() {return disposition;}
 }
