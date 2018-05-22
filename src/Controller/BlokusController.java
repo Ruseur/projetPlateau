@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.Jeu.Blokus;
+import Model.Joueur.Joueur;
 import Model.Plateau.Grille;
 import Model.Plateau.Piece;
 import Model.Plateau.Plateau;
@@ -8,24 +9,16 @@ import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import view.BlokusView;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 
 public class BlokusController extends GameController {
 
     private Blokus blokus;
-    private Piece currentPiece;
     private Grille grille;
-    private Piece nextPiece;
-    private boolean perdu;
-    private Timer timer;
+    private ArrayList<Joueur> players;
 
-    private int currentLevel;
-    private int nbPieceLevel;
 
 
     public BlokusController(Plateau plateau){
@@ -41,6 +34,12 @@ public class BlokusController extends GameController {
 
 
     public void start() {
+
+        Joueur joueur = new Joueur();
+        this.blokus.addJoueur(joueur);
+
+        this.players = this.blokus.getPlayers();
+
         this.blokus.setStatus("playing");
     }
 
@@ -53,17 +52,7 @@ public class BlokusController extends GameController {
     }
 
     public void translation(String direction) {
-        switch (direction) {
-            case "bas":
-                this.currentPiece.translation(-1, 0);
-                break;
-            case "gauche":
-                this.currentPiece.translation(0, -1);
-                break;
-            case "droite":
-                this.currentPiece.translation(0, 1);
-                break;
-        }
+        // TODO
     }
 
     public void finPartie(){
@@ -130,9 +119,6 @@ public class BlokusController extends GameController {
         Color color = listeCouleur.get((int) rand);
 
         int id = 1;
-        if (this.currentPiece != null) {
-            id = this.currentPiece.getId() + 1;
-        }
 
         return new Piece(id, dispo, color);
     }

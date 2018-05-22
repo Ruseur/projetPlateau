@@ -53,7 +53,6 @@ public class BlokusView extends GameView{
         BorderPane rightPane = new BorderPane();
         rightPane.setTop(this.getInfoView());
         rightPane.setCenter(this.getGameControllerView());
-        rightPane.setBottom(this.getInGameControllerView());
         this.setRight(rightPane);
     }
 
@@ -118,34 +117,6 @@ public class BlokusView extends GameView{
         return gameControllerView;
     }
 
-    private Pane getInGameControllerView() {
-
-        GridPane inGameControllerView = new GridPane();
-
-        Button left = new Button("Left");
-        left.setOnMouseClicked(this);
-        left.setMaxWidth(Double.MAX_VALUE);
-        inGameControllerView.add(left,0,1);
-
-        Button right = new Button("Right");
-        right.setOnMouseClicked(this);
-        right.setMaxWidth(Double.MAX_VALUE);
-        inGameControllerView.add(right,2,1);
-
-        Button up = new Button("Up");
-        up.setOnMouseClicked(this);
-        up.setMaxWidth(Double.MAX_VALUE);
-        inGameControllerView.add(up,1,0);
-
-        Button down = new Button("Down");
-        down.setOnMouseClicked(this);
-        down.setMaxWidth(Double.MAX_VALUE);
-        inGameControllerView.add(down,1,1);
-
-        inGameControllerView.setAlignment(Pos.CENTER);
-
-        return inGameControllerView;
-    }
 
     private Pane getScoreView() {
         GridPane scoreView = new GridPane();
@@ -160,8 +131,10 @@ public class BlokusView extends GameView{
     private Pane getLevelView() {
         GridPane levelView = new GridPane();
         levelView.setId("LevelView");
+
         Text levelValue = new Text(Integer.toString(this.jeu.getLevel()));
         levelValue.setId("LevelValue");
+
         levelView.add(new Text("Niveau: "),0,0);
         levelView.add(levelValue,1,0);
         return levelView;
