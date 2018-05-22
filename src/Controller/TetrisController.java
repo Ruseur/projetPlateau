@@ -172,17 +172,26 @@ public class TetrisController extends GameController {
         this.grille.clear();
         this.jeu = jeu;
         this.perdu = false;
-        //this.grille = grille;
 
-        //this.tetris.setNextPieceGrille(new Grille(5,4));
-
+        this.jeu.setScore(0);
         this.jeu.setLevel(1);
         this.nbPieceLevel = 0;
 
         this.timer.cancel();
         this.timer = new Timer();
 
-        //super.gameView = new TetrisView(this, tetris);
+        this.start();
+    }
+
+    public void resume(){
+        this.timer = new Timer();
+        timer.schedule(nextFrameTask(), 0, 1000/this.jeu.getLevel());
+        this.jeu.setStatus("playing");
+    }
+
+    public void pause(){
+        timer.cancel();
+        this.jeu.setStatus("paused");
     }
 
     private Piece generationPiece() {
@@ -261,11 +270,14 @@ public class TetrisController extends GameController {
             case "Play":
                 this.start();
                 break;
+            case "Resume":
+                this.resume();
+                break;
             case "Pause":
-                // TODO
+                this.pause();
                 break;
             case "Reset":
-                this.start();
+                this.reset();
                 break;
             case "Left":
                 if(this.jeu.getStatus().equals("playing"))

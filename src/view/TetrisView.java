@@ -93,6 +93,10 @@ public class TetrisView extends GameView{
         playButton.setMaxWidth(Double.MAX_VALUE);
         playButton.setOnMouseClicked(this);
 
+        Button resumeButton = new Button("Resume");
+        resumeButton.setMaxWidth(Double.MAX_VALUE);
+        resumeButton.setOnMouseClicked(this);
+
         Button pauseButton = new Button("Pause");
         pauseButton.setMaxWidth(Double.MAX_VALUE);
         pauseButton.setOnMouseClicked(this);
@@ -107,7 +111,7 @@ public class TetrisView extends GameView{
                 gameControllerView.getChildren().addAll(pauseButton,resetButton);
                 break;
             case "paused":
-                gameControllerView.getChildren().addAll(playButton,resetButton);
+                gameControllerView.getChildren().addAll(resumeButton,resetButton);
                 break;
             case "finished":
                 playButton.setText("Play again");
@@ -181,7 +185,7 @@ public class TetrisView extends GameView{
 
         ArrayList<Pane> options = new ArrayList<Pane>();
 
-        if(this.jeu.getStatus().equals("playing")) {
+        if(this.jeu.getStatus().equals("playing") || this.jeu.getStatus().equals("paused")) {
             options.add(this.getScoreView());
             options.add(new GrilleView(this.jeu.getNextPieceGrille()));
             options.add(this.getLevelView());
@@ -227,6 +231,9 @@ public class TetrisView extends GameView{
                     case "playing":
                         this.loadInGameView();
                         break;
+                    case "paused":
+                        this.loadInGameView();
+                        break;
                     case "finished":
                         this.loadFinishView();
                         break;
@@ -255,6 +262,9 @@ public class TetrisView extends GameView{
         switch (action) {
             case "Play":
                 this.tetrisController.command("Play");
+                break;
+            case "Resume":
+                this.tetrisController.command("Resume");
                 break;
             case "Pause":
                 this.tetrisController.command("Pause");
