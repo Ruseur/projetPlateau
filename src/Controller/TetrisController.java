@@ -1,5 +1,6 @@
 package Controller;
 
+import Controller.service.TextParser;
 import Model.Jeu.Tetris;
 import Model.Plateau.Case;
 import Model.Plateau.Grille;
@@ -50,6 +51,8 @@ public class TetrisController extends GameController {
 
 
     public void start() {
+        this.getScores();
+
         this.currentPiece = this.generationPiece();
 
         this.majNextPiece();
@@ -150,13 +153,36 @@ public class TetrisController extends GameController {
 
     public void suppressionLigne() {
         int nbLignesSuppr = this.grille.suppressionLigne();
-        int points = (int) (10* Math.pow(nbLignesSuppr, 2));
-        this.tetris.setScore(this.tetris.getScore()+points);
+        if(nbLignesSuppr != 0){
+            int points = (int) (10* Math.pow(nbLignesSuppr, 2));
+            this.tetris.setScore(this.tetris.getScore()+points);
+        }
     }
 
     public void finPartie(){
         System.out.println("Fin de partie");
         this.tetris.setStatus("finished");
+        this.reset();
+
+    }
+
+    public void reset(){
+
+        //Grille grille = new Grille(10,20);
+        this.grille.clear();
+        this.tetris = tetris;
+        this.perdu = false;
+        //this.grille = grille;
+
+        //this.tetris.setNextPieceGrille(new Grille(5,4));
+
+        this.tetris.setLevel(1);
+        this.nbPieceLevel = 0;
+
+        this.timer.cancel();
+        this.timer = new Timer();
+
+        //super.gameView = new TetrisView(this, tetris);
     }
 
     private Piece generationPiece() {
@@ -282,6 +308,11 @@ public class TetrisController extends GameController {
                 }
             }
         };
+    }
+
+    public ArrayList<String> getScores(){
+        TextParser tp = new TextParser("scoresTetris.txt");
+        return tp.readAll();
     }
 }
 
