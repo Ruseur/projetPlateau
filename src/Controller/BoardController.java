@@ -6,6 +6,7 @@ import view.DefaultView;
 
 public class BoardController {
     private BoardView boardView;
+    private GameController gameController;
     private Plateau plateau;
 
     public BoardController() {
@@ -14,14 +15,18 @@ public class BoardController {
     }
 
     public void changeGame(String gameName){
+        if(this.gameController != null)
+            this.gameController.reset();
         switch (gameName) {
             case "Tetris":
-                TetrisController tetrisController = new TetrisController(this.plateau);
-                this.boardView.setBody(tetrisController.getGameView());
+                this.gameController = new TetrisController(this.plateau);
+                this.plateau.setJeu(gameController.getJeu());
+                this.boardView.setBody(gameController.getGameView());
                 break;
             case "Blokus":
-                BlokusController blokusController = new BlokusController(this.plateau);
-                this.boardView.setBody(blokusController.getGameView());
+                this.gameController = new BlokusController(this.plateau);
+                this.plateau.setJeu(gameController.getJeu());
+                this.boardView.setBody(gameController.getGameView());
                 break;
             default:
                 this.boardView.setBody(new DefaultView("Not implemented yet !"));

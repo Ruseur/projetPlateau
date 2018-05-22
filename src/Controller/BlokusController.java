@@ -60,6 +60,11 @@ public class BlokusController extends GameController {
         super.gameView = new BlokusView(this, blokus);
     }
 
+    @Override
+    public void reset() {
+
+    }
+
 
     private ArrayList<Piece> getPiecesWithColor(Color color) {
         ArrayList<Piece> playerPiece = new ArrayList<>();

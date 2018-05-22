@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TetrisController extends GameController {
 
-    private Tetris tetris;
+    private Tetris jeu;
     private Piece currentPiece;
     private Grille grille;
     private Piece nextPiece;
@@ -35,13 +35,13 @@ public class TetrisController extends GameController {
 
         Grille grille = new Grille(10,20);
         Tetris tetris = new Tetris(grille);
-        this.tetris = tetris;
+        this.jeu = tetris;
         this.perdu = false;
         this.grille = grille;
 
-        this.tetris.setNextPieceGrille(new Grille(5,4));
+        this.jeu.setNextPieceGrille(new Grille(5,4));
 
-        this.tetris.setLevel(1);
+        this.jeu.setLevel(1);
         this.nbPieceLevel = 0;
 
         this.timer = new Timer();
@@ -62,17 +62,17 @@ public class TetrisController extends GameController {
         this.currentPiece.placement(0, 4);
 
 
-        this.tetris.setStatus("playing");
-        timer.schedule(nextFrameTask(), 0, 1000/this.tetris.getLevel());
+        this.jeu.setStatus("playing");
+        timer.schedule(nextFrameTask(), 0, 1000/this.jeu.getLevel());
 
 
     }
 
     private void majNextPiece() {
-        this.tetris.getNextPieceGrille().clear();
+        this.jeu.getNextPieceGrille().clear();
 
         this.nextPiece = this.generationPiece();
-        this.nextPiece.setGrille(this.tetris.getNextPieceGrille());
+        this.nextPiece.setGrille(this.jeu.getNextPieceGrille());
         this.nextPiece.placement(1,1);
 
 
@@ -115,11 +115,11 @@ public class TetrisController extends GameController {
     public void gestionLevel(){
         if(nbPieceLevel >= 10){
             nbPieceLevel =0;
-            this.tetris.setLevel(this.tetris.getLevel() + 1);
+            this.jeu.setLevel(this.jeu.getLevel() + 1);
 
             this.timer.cancel();
             this.timer = new Timer();
-            timer.schedule(nextFrameTask(), 0, 1000/this.tetris.getLevel());
+            timer.schedule(nextFrameTask(), 0, 1000/this.jeu.getLevel());
         }
         else{
             nbPieceLevel++;
@@ -155,13 +155,13 @@ public class TetrisController extends GameController {
         int nbLignesSuppr = this.grille.suppressionLigne();
         if(nbLignesSuppr != 0){
             int points = (int) (10* Math.pow(nbLignesSuppr, 2));
-            this.tetris.setScore(this.tetris.getScore()+points);
+            this.jeu.setScore(this.jeu.getScore()+points);
         }
     }
 
     public void finPartie(){
         System.out.println("Fin de partie");
-        this.tetris.setStatus("finished");
+        this.jeu.setStatus("finished");
         this.reset();
 
     }
@@ -170,13 +170,13 @@ public class TetrisController extends GameController {
 
         //Grille grille = new Grille(10,20);
         this.grille.clear();
-        this.tetris = tetris;
+        this.jeu = jeu;
         this.perdu = false;
         //this.grille = grille;
 
         //this.tetris.setNextPieceGrille(new Grille(5,4));
 
-        this.tetris.setLevel(1);
+        this.jeu.setLevel(1);
         this.nbPieceLevel = 0;
 
         this.timer.cancel();
@@ -268,19 +268,19 @@ public class TetrisController extends GameController {
                 this.start();
                 break;
             case "Left":
-                if(this.tetris.getStatus().equals("playing"))
+                if(this.jeu.getStatus().equals("playing"))
                     this.translation("gauche");
                 break;
             case "Right":
-                if(this.tetris.getStatus().equals("playing"))
+                if(this.jeu.getStatus().equals("playing"))
                     this.translation("droite");
                 break;
             case "Up":
-                if(this.tetris.getStatus().equals("playing"))
+                if(this.jeu.getStatus().equals("playing"))
                     this.rotation();
                 break;
             case "Down":
-                if(this.tetris.getStatus().equals("playing"))
+                if(this.jeu.getStatus().equals("playing"))
                     this.translation("bas");
                 break;
         }
