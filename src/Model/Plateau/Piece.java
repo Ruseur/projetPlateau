@@ -137,6 +137,13 @@ public class Piece extends Observable {
         }
     }
 
+    public boolean testPlacement(int yOrig, int xOrig) {
+        while(!placement(yOrig++,xOrig++)) {
+            yOrig = yOrig+2;
+        }
+        return true;
+    }
+
     public boolean rotationHoraire() {
         //transformation de la disposition
         int largeurDispo = this.disposition[0].length;

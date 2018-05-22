@@ -28,6 +28,11 @@ public class GrilleView extends GridPane implements Observer{
 
 
     public GrilleView(Grille grille){
+        this.generateGrid(grille);
+        grille.addObserver(this);
+    }
+
+    public void generateGrid(Grille grille) {
         for (int i=0; i<grille.getLargeur(); i++)
             for (int j=0; j<grille.getHauteur(); j++){
                 Rectangle rec = new Rectangle();
@@ -38,8 +43,6 @@ public class GrilleView extends GridPane implements Observer{
                 rec.setStroke(Color.WHITE);
                 this.add(rec, i, j);
             }
-
-            grille.addObserver(this);
     }
 
     @Override

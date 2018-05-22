@@ -56,9 +56,9 @@ public class BlokusView extends GameView{
         rightPane.setCenter(this.getGameControllerView());
 
 
-
-
-        rightPane.setBottom(new GrilleView(this.jeu.getCurrentGridPlayer()));
+        GrilleView playerGrilleView = new GrilleView(this.jeu.getCurrentGridPlayer());
+        playerGrilleView.setId("PlayerGrilleView");
+        rightPane.setBottom(playerGrilleView);
         this.setRight(rightPane);
     }
 
@@ -97,6 +97,10 @@ public class BlokusView extends GameView{
         playButton.setMaxWidth(Double.MAX_VALUE);
         playButton.setOnMouseClicked(this);
 
+        Button nextButton = new Button("Next");
+        nextButton.setMaxWidth(Double.MAX_VALUE);
+        nextButton.setOnMouseClicked(this);
+
         Button pauseButton = new Button("Pause");
         pauseButton.setMaxWidth(Double.MAX_VALUE);
         pauseButton.setOnMouseClicked(this);
@@ -108,7 +112,7 @@ public class BlokusView extends GameView{
         String gameStatus = this.jeu.getStatus();
         switch (gameStatus) {
             case "playing":
-                gameControllerView.getChildren().addAll(pauseButton,resetButton);
+                gameControllerView.getChildren().addAll(nextButton,pauseButton,resetButton);
                 break;
             case "paused":
                 gameControllerView.getChildren().addAll(playButton,resetButton);
@@ -186,11 +190,10 @@ public class BlokusView extends GameView{
     @Override
     public void update(Observable o, Object arg) {
         if(o instanceof Blokus) {
-            if(arg.equals("ScoreUpdate")) {
-                ((Text) this.lookup("#ScoreValue")).setText(Integer.toString(this.jeu.getScore()));
-            }
-            if(arg.equals("LevelUpdate")) {
-                ((Text)this.lookup("#LevelValue")).setText(Integer.toString(this.jeu.getLevel()));
+            if(arg.equals("PlayerGridUpdate") && this.jeu.getStatus().equals("playing")) {
+                GrilleView playerGrilleView = ((GrilleView) this.lookup("#PlayerGrilleView"));
+                playerGrilleView.getChildren().removeAll(playerGrilleView.getChildren());
+                playerGrilleView.generateGrid(this.jeu.getCurrentGridPlayer());
             }
 
             if(arg.equals("StatusUpdate")) {
@@ -222,20 +225,11 @@ public class BlokusView extends GameView{
             case "Pause":
                 this.blokusController.command("Pause");
                 break;
+            case "Next":
+                this.blokusController.command("Next");
+                break;
             case "Reset":
                 this.blokusController.command("Reset");
-                break;
-            case "Left":
-                this.blokusController.command("Left");
-                break;
-            case "Right":
-                this.blokusController.command("Right");
-                break;
-            case "Up":
-                this.blokusController.command("Up");
-                break;
-            case "Down":
-                this.blokusController.command("Down");
                 break;
             default:
                 break;

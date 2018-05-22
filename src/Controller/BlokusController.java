@@ -9,7 +9,6 @@ import javafx.scene.paint.Color;
 import view.BlokusView;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 
 public class BlokusController extends GameController {
@@ -27,10 +26,10 @@ public class BlokusController extends GameController {
         super(plateau);
         this.setPieces();
 
-        availableColors.add(Color.LEMONCHIFFON);
-        availableColors.add(Color.SANDYBROWN);
-        availableColors.add(Color.CHARTREUSE);
-        availableColors.add(Color.NAVAJOWHITE);
+        availableColors.add(Color.BLUE);
+        availableColors.add(Color.GREEN);
+        availableColors.add(Color.YELLOW);
+        availableColors.add(Color.RED);
 
         Grille grille = new Grille(20,20);
         Blokus blokus = new Blokus(grille);
@@ -40,10 +39,10 @@ public class BlokusController extends GameController {
         this.blokus = blokus;
         this.grille = grille;
 
-        this.blokus.addJoueur(new Joueur("Toto"));
-        this.blokus.addJoueur(new Joueur("Tata"));
-        this.blokus.addJoueur(new Joueur("Tutu"));
-        this.blokus.addJoueur(new Joueur("Titi"));
+        this.blokus.addPlayer(new Joueur("Toto"));
+        this.blokus.addPlayer(new Joueur("Tata"));
+        this.blokus.addPlayer(new Joueur("Tutu"));
+        this.blokus.addPlayer(new Joueur("Titi"));
 
         for(Joueur player : this.blokus.getPlayers()) {
             gridByPlayers.add(this.getPlayerGrid(player));
@@ -54,7 +53,7 @@ public class BlokusController extends GameController {
     }
 
     private Grille getPlayerGrid(Joueur player) {
-        Grille grid = new Grille(10,10);
+        Grille grid = new Grille(20,20);
         Random random = new Random();
         int index = random.nextInt(this.availableColors.size());
 
@@ -63,7 +62,9 @@ public class BlokusController extends GameController {
 
         for(Piece piece: this.pieces) {
 
-            grid.addPiece(new Piece(piece.getId(),piece.getDisposition(),color));
+            Piece currentPiece = new Piece(piece.getId(),piece.getDisposition(),color);
+            currentPiece.setGrille(grid);
+            currentPiece.testPlacement(0,0);
 
         }
 
@@ -139,7 +140,10 @@ public class BlokusController extends GameController {
     }
 
     public void next() {
-        // TODO
+        int nextPlayerIndex = this.blokus.getNextPlayerIndex();
+        this.blokus.setCurrentPlayer(this.blokus.getPlayers().get(nextPlayerIndex));
+        this.blokus.setCurrentGridPlayer(this.gridByPlayers.get(nextPlayerIndex));
+
     }
 
     public void rotation() {
@@ -165,27 +169,14 @@ public class BlokusController extends GameController {
             case "Play":
                 this.start();
                 break;
+            case "Next":
+                this.next();
+                break;
             case "Pause":
                 // TODO
                 break;
             case "Reset":
                 this.start();
-                break;
-            case "Left":
-                if(this.blokus.getStatus().equals("playing"))
-                    this.translation("gauche");
-                break;
-            case "Right":
-                if(this.blokus.getStatus().equals("playing"))
-                    this.translation("droite");
-                break;
-            case "Up":
-                if(this.blokus.getStatus().equals("playing"))
-                    this.rotation();
-                break;
-            case "Down":
-                if(this.blokus.getStatus().equals("playing"))
-                    this.translation("bas");
                 break;
         }
     }

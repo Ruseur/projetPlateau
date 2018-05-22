@@ -22,6 +22,22 @@ public class Blokus extends Jeu {
         return currentPlayer;
     }
 
+    public Integer getNextPlayerIndex() {
+        int nextIndex;
+        int currentIndex = this.players.indexOf(this.currentPlayer);
+        if(currentIndex == this.players.size() - 1) {
+            nextIndex = 0;
+        } else {
+            nextIndex = currentIndex + 1;
+        }
+        return nextIndex;
+    }
+
+    public Joueur getNextPlayer() {
+        Integer nextIndex = this.getNextPlayerIndex();
+        return this.players.get(nextIndex);
+    }
+
     public void setCurrentPlayer(Joueur currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
@@ -30,7 +46,7 @@ public class Blokus extends Jeu {
         return players;
     }
 
-    public void addJoueur(Joueur player) {
+    public void addPlayer(Joueur player) {
         this.players.add(player);
     }
 
@@ -56,5 +72,7 @@ public class Blokus extends Jeu {
 
     public void setCurrentGridPlayer(Grille currentGridPlayer) {
         this.currentGridPlayer = currentGridPlayer;
+        setChanged();
+        notifyObservers("PlayerGridUpdate");
     }
 }
