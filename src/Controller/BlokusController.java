@@ -14,17 +14,15 @@ import java.util.*;
 public class BlokusController extends GameController {
 
     private Blokus blokus;
-    private Grille grille;
     private ArrayList<Joueur> players = new ArrayList<>();
     private ArrayList<Piece> pieces = new ArrayList<>();
-    private ArrayList<Color> availableColors = new ArrayList<>();
 
 
-
-    public BlokusController(Plateau plateau){
+    BlokusController(Plateau plateau){
         super(plateau);
         this.addPieces();
 
+        ArrayList<Color> availableColors = new ArrayList<>();
         availableColors.add(Color.BLUE);
         availableColors.add(Color.GREEN);
         availableColors.add(Color.HOTPINK);
@@ -36,7 +34,6 @@ public class BlokusController extends GameController {
         blokus.setPieces(this.pieces);
 
         this.blokus = blokus;
-        this.grille = grille;
 
         this.blokus.addPlayer(new Joueur("Toto"));
         this.blokus.addPlayer(new Joueur("Tata"));
@@ -48,10 +45,10 @@ public class BlokusController extends GameController {
 
         ArrayList<ArrayList<Piece>> playersPieces = new ArrayList<>();
         for(Joueur player : this.blokus.getPlayers()) {
-            int index = random.nextInt(this.availableColors.size());
+            int index = random.nextInt(availableColors.size());
 
-            Color color = this.availableColors.get(index);
-            this.availableColors.remove(index);
+            Color color = availableColors.get(index);
+            availableColors.remove(index);
             player.setColor(color);
             playersPieces.add(this.getPiecesWithColor(color));
         }
@@ -179,7 +176,7 @@ public class BlokusController extends GameController {
     }
 
 
-    public void start() {
+    private void start() {
 
 
         this.players = this.blokus.getPlayers();
@@ -190,7 +187,7 @@ public class BlokusController extends GameController {
         this.blokus.setStatus("playing");
     }
 
-    public void next() {
+    private void next() {
         int nextPlayerIndex = this.blokus.getNextPlayerIndex();
         this.blokus.setCurrentPlayer(this.blokus.getPlayers().get(nextPlayerIndex));
         this.blokus.setCurrentPlayerPieces(this.blokus.getPlayersPieces().get(nextPlayerIndex));
@@ -204,7 +201,7 @@ public class BlokusController extends GameController {
         // TODO
     }
 
-    public void finPartie(){
+    public void gameEnd(){
         System.out.println("Fin de partie");
         this.blokus.setStatus("finished");
     }
@@ -226,6 +223,7 @@ public class BlokusController extends GameController {
                 // TODO
                 break;
             case "Reset":
+                this.reset();
                 this.start();
                 break;
         }

@@ -280,6 +280,7 @@ public class TetrisView extends GameView implements EventHandler<Event> {
             }
 
             if(arg.equals("StatusUpdate")) {
+                this.cleanView();
                 switch (tetris.getStatus()) {
                     case "playing":
                         this.loadInGameView(tetris);
@@ -346,7 +347,7 @@ public class TetrisView extends GameView implements EventHandler<Event> {
                 this.tetrisController.command("Down");
                 break;
             case "Confirm":
-                this.tetrisController.setJoueur(((TextField)this.lookup("#PlayerNameField")).getText());
+                this.tetrisController.setPlayer(((TextField)this.lookup("#PlayerNameField")).getText());
                 break;
             default:
                 break;

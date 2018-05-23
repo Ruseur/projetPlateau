@@ -14,7 +14,7 @@ public class BoardController {
         this.boardView = new BoardView(this, this.plateau);
     }
 
-    public void changeGame(String gameName){
+    public void switchGame(String gameName){
         if(this.gameController != null)
             this.gameController.reset();
         switch (gameName) {

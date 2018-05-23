@@ -102,13 +102,13 @@ public class BoardView extends BorderPane implements EventHandler, Observer {
                     Platform.exit();
                     break;
                 case "Tetris":
-                    this.boardController.changeGame("Tetris");
+                    this.boardController.switchGame("Tetris");
                     break;
                 case "Blokus":
-                    this.boardController.changeGame("Blokus");
+                    this.boardController.switchGame("Blokus");
                     break;
                 case "Puzzle":
-                    this.boardController.changeGame("Puzzle");
+                    this.boardController.switchGame("Puzzle");
                     break;
             }
         }
