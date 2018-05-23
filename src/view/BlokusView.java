@@ -2,16 +2,12 @@ package view;
 
 import Controller.BlokusController;
 import Model.Jeu.Blokus;
-import Model.Jeu.Tetris;
 import Model.Joueur.Joueur;
 import Model.Plateau.Piece;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -20,7 +16,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Observable;
 
 public class BlokusView extends GameView{

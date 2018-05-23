@@ -5,14 +5,9 @@
  */
 package view;
 
-import Controller.TetrisController;
 import Model.Plateau.Case;
 import Model.Plateau.Grille;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -20,10 +15,6 @@ import javafx.scene.shape.Rectangle;
 import java.util.Observable;
 import java.util.Observer;
 
-/**
- *
- * @author vvhuan
- */
 public class GrilleView extends GridPane implements Observer{
 
 

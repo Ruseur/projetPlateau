@@ -7,6 +7,7 @@ public class Tetris extends Jeu{
 
     private Joueur joueur;
     private Grille nextPieceGrille;
+    private int level;
 
     public Tetris(){}
 
@@ -32,5 +33,15 @@ public class Tetris extends Jeu{
         this.joueur = joueur;
         setChanged();
         notifyObservers("PlayerUpdate");
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+        setChanged();
+        notifyObservers("LevelUpdate");
     }
 }

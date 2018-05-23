@@ -3,7 +3,6 @@ package view;
 import Controller.TetrisController;
 import Model.Jeu.Tetris;
 import Model.Joueur.Joueur;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

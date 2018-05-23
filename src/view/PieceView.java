@@ -1,13 +1,10 @@
 package view;
 
-import Model.Plateau.Case;
 import Model.Plateau.Piece;
-import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 

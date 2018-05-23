@@ -5,12 +5,10 @@ import Model.Jeu.Tetris;
 import Model.Joueur.Joueur;
 import Model.Plateau.Grille;
 import Model.Plateau.Piece;
-import javafx.application.Platform;
 import Model.Plateau.Plateau;
-import jdk.nashorn.internal.ir.WhileNode;
-import view.TetrisView;
-
+import javafx.application.Platform;
 import javafx.scene.paint.Color;
+import view.TetrisView;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -170,7 +168,9 @@ public class TetrisController extends GameController {
         this.grille.clear();
         this.perdu = false;
 
-        this.jeu.getJoueur().setScore(0);
+        if(this.jeu.getJoueur() != null)
+            this.jeu.getJoueur().setScore(0);
+
         this.jeu.setLevel(1);
         this.nbPieceLevel = 0;
 

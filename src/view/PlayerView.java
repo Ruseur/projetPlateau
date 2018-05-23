@@ -5,24 +5,13 @@
  */
 package view;
 
-import Model.Jeu.Jeu;
 import Model.Joueur.Joueur;
-import Model.Plateau.Case;
-import Model.Plateau.Grille;
-import javafx.scene.Node;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.util.Observable;
 import java.util.Observer;
 
-/**
- *
- * @author vvhuan
- */
 public class PlayerView extends HBox implements Observer{
 
 

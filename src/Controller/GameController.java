@@ -9,14 +9,10 @@ import Model.Jeu.Jeu;
 import Model.Plateau.Plateau;
 import view.GameView;
 
-/**
- *
- * @author vvhuan
- */
 public abstract class GameController{
     protected Plateau plateau;
     GameView gameView;
-    Jeu jeu;
+    private Jeu jeu;
 
     GameController(Plateau plateau) {
         this.plateau = plateau;
