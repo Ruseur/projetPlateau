@@ -1,4 +1,4 @@
-package Model.Jeu;
+package Model.Game;
 
 public class Puzzle {
 }

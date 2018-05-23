@@ -5,7 +5,7 @@
  */
 package view;
 
-import Model.Joueur.Joueur;
+import Model.Player.Player;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
@@ -15,20 +15,20 @@ import java.util.Observer;
 public class PlayerView extends HBox implements Observer{
 
 
-    public PlayerView(Joueur joueur){
-        Text text = new Text(joueur.getNom() + " - " + Integer.toString(joueur.getScore()));
-        text.setId("Player"+joueur.getNom());
+    public PlayerView(Player player){
+        Text text = new Text(player.getName() + " - " + Integer.toString(player.getScore()));
+        text.setId("Player"+ player.getName());
 
-        if(joueur.getColor() != null)
-            text.setFill(joueur.getColor());
+        if(player.getColor() != null)
+            text.setFill(player.getColor());
 
         this.getChildren().add(text);
-        joueur.addObserver(this);
+        player.addObserver(this);
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        if(o instanceof Joueur && arg instanceof String) {
+        if(o instanceof Player && arg instanceof String) {
 
         }
     }

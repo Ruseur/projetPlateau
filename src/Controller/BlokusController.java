@@ -1,10 +1,10 @@
 package Controller;
 
-import Model.Jeu.Blokus;
-import Model.Joueur.Joueur;
-import Model.Plateau.Grille;
-import Model.Plateau.Piece;
-import Model.Plateau.Plateau;
+import Model.Board.Board;
+import Model.Board.Grid;
+import Model.Game.Blokus;
+import Model.Player.Player;
+import Model.Board.Piece;
 import javafx.scene.paint.Color;
 import view.BlokusView;
 
@@ -14,12 +14,12 @@ import java.util.*;
 public class BlokusController extends GameController {
 
     private Blokus blokus;
-    private ArrayList<Joueur> players = new ArrayList<>();
+    private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Piece> pieces = new ArrayList<>();
 
 
-    BlokusController(Plateau plateau){
-        super(plateau);
+    BlokusController(Board board){
+        super(board);
         this.addPieces();
 
         ArrayList<Color> availableColors = new ArrayList<>();
@@ -28,23 +28,23 @@ public class BlokusController extends GameController {
         availableColors.add(Color.HOTPINK);
         availableColors.add(Color.RED);
 
-        Grille grille = new Grille(20,20);
-        Blokus blokus = new Blokus(grille);
+        Grid grid = new Grid(20,20);
+        Blokus blokus = new Blokus(grid);
 
         blokus.setPieces(this.pieces);
 
         this.blokus = blokus;
 
-        this.blokus.addPlayer(new Joueur("Toto"));
-        this.blokus.addPlayer(new Joueur("Tata"));
-        this.blokus.addPlayer(new Joueur("Tutu"));
-        this.blokus.addPlayer(new Joueur("Titi"));
+        this.blokus.addPlayer(new Player("Toto"));
+        this.blokus.addPlayer(new Player("Tata"));
+        this.blokus.addPlayer(new Player("Tutu"));
+        this.blokus.addPlayer(new Player("Titi"));
 
 
         Random random = new Random();
 
         ArrayList<ArrayList<Piece>> playersPieces = new ArrayList<>();
-        for(Joueur player : this.blokus.getPlayers()) {
+        for(Player player : this.blokus.getPlayers()) {
             int index = random.nextInt(availableColors.size());
 
             Color color = availableColors.get(index);

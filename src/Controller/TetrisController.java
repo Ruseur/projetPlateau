@@ -1,11 +1,11 @@
 package Controller;
 
 import Controller.service.TextParser;
-import Model.Jeu.Tetris;
-import Model.Joueur.Joueur;
-import Model.Plateau.Grille;
-import Model.Plateau.Piece;
-import Model.Plateau.Plateau;
+import Model.Game.Tetris;
+import Model.Player.Player;
+import Model.Board.Grid;
+import Model.Board.Piece;
+import Model.Board.Board;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import view.TetrisView;
@@ -25,15 +25,15 @@ public class TetrisController extends GameController {
     private int nbPieceLevel;
 
 
-    public TetrisController(Plateau plateau){
-        super(plateau);
+    public TetrisController(Board board){
+        super(board);
 
-        Grille grille = new Grille(10,20);
-        Tetris tetris = new Tetris(grille);
+        Grid grid = new Grid(10,20);
+        Tetris tetris = new Tetris(grid);
         this.game = tetris;
         this.loose = false;
 
-        this.game.setNextPieceGrille(new Grille(5,4));
+        this.game.setNextPieceGrid(new Grid(5,4));
 
         this.game.setLevel(1);
         this.nbPieceLevel = 0;
@@ -49,9 +49,9 @@ public class TetrisController extends GameController {
 
         this.updateNextPiece();
 
-        this.currentPiece.setGrille(this.game.getGrille());
+        this.currentPiece.setGrid(this.game.getGrid());
 
-        this.currentPiece.placement(0, 4);
+        this.currentPiece.place(0, 4);
 
 
         this.game.setStatus("playing");
@@ -61,11 +61,11 @@ public class TetrisController extends GameController {
     }
 
     private void updateNextPiece() {
-        this.game.getNextPieceGrille().clear();
+        this.game.getNextPieceGrid().clear();
 
         this.nextPiece = this.getRandomPiece();
-        this.nextPiece.setGrille(this.game.getNextPieceGrille());
-        this.nextPiece.placement(1,1);
+        this.nextPiece.setGrid(this.game.getNextPieceGrid());
+        this.nextPiece.place(1,1);
 
 
     }
@@ -80,9 +80,9 @@ public class TetrisController extends GameController {
             this.updateNextPiece();
 
 
-            this.currentPiece.setGrille(this.game.getGrille());
+            this.currentPiece.setGrid(this.game.getGrid());
 
-            if(!this.currentPiece.placement(0, 3)){
+            if(!this.currentPiece.place(0, 3)){
                 this.loose = true;
             }
             else{
@@ -90,7 +90,7 @@ public class TetrisController extends GameController {
             }
         }
 
-        /*for(Case[] ligne : this.game.getGrille().getGrilleCase()){
+        /*for(Case[] ligne : this.game.getGrid().getGrilleCase()){
             for(Case c: ligne){
                 int id=0;
                     if(c.getPiece() !=null){
@@ -120,11 +120,11 @@ public class TetrisController extends GameController {
 
     private void rotation() {
 
-        if (!this.currentPiece.rotationHoraire()) {
+        if (!this.currentPiece.clockwiseRotation()) {
             //decalage de la pièce pour qu'elle puisse tourner a droite du tableau
             int decalage = (this.currentPiece.getMaxY() - this.currentPiece.getMinY());
             this.currentPiece.translation(-(decalage) / 2, -decalage);
-            this.currentPiece.rotationHoraire();
+            this.currentPiece.clockwiseRotation();
         }
 
     }
@@ -144,15 +144,15 @@ public class TetrisController extends GameController {
     }
 
     private void deleteRow() {
-        int nbDeletedRows = this.game.getGrille().suppressionLigne();
+        int nbDeletedRows = this.game.getGrid().deleteRow();
         if(nbDeletedRows != 0){
             int points = (int) (10* Math.pow(nbDeletedRows, 2));
-            this.game.getJoueur().setScore(this.game.getJoueur().getScore()+points);
+            this.game.getPlayer().setScore(this.game.getPlayer().getScore()+points);
         }
     }
 
     private void gameEnd(){
-        if(this.game.getJoueur().getScore() > 0)
+        if(this.game.getPlayer().getScore() > 0)
             this.saveScore();
         this.reset();
         this.game.setStatus("finished");
@@ -160,12 +160,12 @@ public class TetrisController extends GameController {
 
     public void reset(){
 
-        //Grille grille = new Grille(10,20);
-        this.game.getGrille().clear();
+        //Grid grille = new Grid(10,20);
+        this.game.getGrid().clear();
         this.loose = false;
 
-        if(this.game.getJoueur() != null)
-            this.game.getJoueur().setScore(0);
+        if(this.game.getPlayer() != null)
+            this.game.getPlayer().setScore(0);
 
         this.game.setLevel(1);
         this.nbPieceLevel = 0;
@@ -320,7 +320,7 @@ public class TetrisController extends GameController {
     }
 
     public void saveScore(){
-        int currentScore = this.game.getJoueur().getScore();
+        int currentScore = this.game.getPlayer().getScore();
 
 
         ArrayList<String> bestScores = this.getSavedScores();
@@ -331,12 +331,12 @@ public class TetrisController extends GameController {
 
         while(!isAdded){
             if(i == maxIndex) {
-                bestScores.add(i, this.game.getJoueur().getNom()+":"+Integer.toString(currentScore));
+                bestScores.add(i, this.game.getPlayer().getName()+":"+Integer.toString(currentScore));
                 isAdded = true;
             } else {
                 String[] score = bestScores.get(i).split(":");
                 if (currentScore > Integer.parseInt(score[1])) {
-                    bestScores.add(i, this.game.getJoueur().getNom() + ":" + Integer.toString(currentScore));
+                    bestScores.add(i, this.game.getPlayer().getName() + ":" + Integer.toString(currentScore));
                     isAdded = true;
                 } else {
                     i++;
@@ -349,7 +349,7 @@ public class TetrisController extends GameController {
     }
 
     public void setPlayer(String name) {
-        this.game.setJoueur(new Joueur(name));
+        this.game.setPlayer(new Player(name));
     }
 }
 

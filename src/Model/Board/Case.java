@@ -1,4 +1,4 @@
-package Model.Plateau;
+package Model.Board;
 
 import javafx.scene.paint.Color;
 
@@ -8,7 +8,7 @@ public class Case {
     Piece piece;
     private Color color;
 
-    public Case(int y, int x) {
+    Case(int y, int x) {
         this.piece = null;
         this.y = y;
         this.x = x;
@@ -19,16 +19,16 @@ public class Case {
         return color;
     }
 
-    public void setColor(Color color) {
+    private void setColor(Color color) {
         this.color = color;
     }
 
-    public void raz(){
+    void raz(){
         this.piece = null;
         this.setColor(Color.BLACK);
     }
 
-    public boolean setPiece(Piece piece) {
+    boolean setPiece(Piece piece) {
         if(this.piece == null || piece.getId() == this.getPiece().getId()){
             this.piece = piece;
             this.setColor(this.piece.getColor());
@@ -39,11 +39,11 @@ public class Case {
     }
 
 
-    public Piece getPiece() {
+    Piece getPiece() {
         return piece;
     }
 
-    public void setY(int y) {
+    void setY(int y) {
         this.y = y;
     }
 

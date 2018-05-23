@@ -1,9 +1,9 @@
 package view;
 
 import Controller.BlokusController;
-import Model.Jeu.Blokus;
-import Model.Joueur.Joueur;
-import Model.Plateau.Piece;
+import Model.Game.Blokus;
+import Model.Player.Player;
+import Model.Board.Piece;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -43,7 +43,7 @@ public class BlokusView extends GameView{
         this.cleanView();
         this.setTop(this.getTopPane());
 
-        GridView gridView = new GridView(blokus.getGrille());
+        GridView gridView = new GridView(blokus.getGrid());
         gridView.setAlignment(Pos.CENTER);
         this.setCenter(gridView);
 
@@ -152,7 +152,7 @@ public class BlokusView extends GameView{
         vbox.getChildren().add(title);
 
         VBox playersView = new VBox();
-        for(Joueur player : blokus.getPlayers()) {
+        for(Player player : blokus.getPlayers()) {
             playersView.getChildren().add(new PlayerView(player));
         }
         VBox.setMargin(playersView, new Insets(0, 0, 0, 8));

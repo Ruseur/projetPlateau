@@ -1,8 +1,8 @@
 package view;
 
 import Controller.TetrisController;
-import Model.Jeu.Tetris;
-import Model.Joueur.Joueur;
+import Model.Game.Tetris;
+import Model.Player.Player;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -51,7 +51,7 @@ public class TetrisView extends GameView implements EventHandler<Event> {
         this.cleanView();
         this.setTop(this.getTopPane());
 
-        GridView gridView = new GridView(tetris.getGrille());
+        GridView gridView = new GridView(tetris.getGrid());
         gridView.setAlignment(Pos.CENTER);
         this.setCenter(gridView);
 
@@ -75,8 +75,8 @@ public class TetrisView extends GameView implements EventHandler<Event> {
         playerView.setSpacing(8);
         playerView.setAlignment(Pos.CENTER);
 
-        if(tetris.getJoueur() != null) {
-            Text title = new Text("Hello "+ tetris.getJoueur().getNom()+" !");
+        if(tetris.getPlayer() != null) {
+            Text title = new Text("Hello "+ tetris.getPlayer().getName()+" !");
             title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
             playerView.getChildren().add(title);
         } else {
@@ -134,7 +134,7 @@ public class TetrisView extends GameView implements EventHandler<Event> {
         playButton.setId("PlayButton");
         playButton.setMaxWidth(Double.MAX_VALUE);
         playButton.setOnMouseClicked(this);
-        if(tetris.getJoueur() == null) playButton.setDisable(true);
+        if(tetris.getPlayer() == null) playButton.setDisable(true);
 
         Button resumeButton = new Button("Resume");
         resumeButton.setId("ResumeButton");
@@ -203,11 +203,11 @@ public class TetrisView extends GameView implements EventHandler<Event> {
     }
 
     private Pane getScoreView(Tetris tetris) {
-        tetris.getJoueur().addObserver(this);
+        tetris.getPlayer().addObserver(this);
 
         GridPane scoreView = new GridPane();
         scoreView.setId("ScoreView");
-        Text scoreValue = new Text(Integer.toString(tetris.getJoueur().getScore()));
+        Text scoreValue = new Text(Integer.toString(tetris.getPlayer().getScore()));
         scoreValue.setId("ScoreValue");
         scoreView.add(new Text("Score: "),0,0);
         scoreView.add(scoreValue,1,0);
@@ -239,7 +239,7 @@ public class TetrisView extends GameView implements EventHandler<Event> {
 
         if(tetris.getStatus().equals("playing") || tetris.getStatus().equals("paused")) {
             options.add(this.getScoreView(tetris));
-            options.add(new GridView(tetris.getNextPieceGrille()));
+            options.add(new GridView(tetris.getNextPieceGrid()));
             options.add(this.getLevelView(tetris));
         }
 
@@ -298,10 +298,10 @@ public class TetrisView extends GameView implements EventHandler<Event> {
             }
         }
 
-        if(o instanceof Joueur) {
-            Joueur joueur = (Joueur) o;
+        if(o instanceof Player) {
+            Player player = (Player) o;
             if(arg.equals("ScoreUpdate")) {
-                ((Text) this.lookup("#ScoreValue")).setText(Integer.toString(joueur.getScore()));
+                ((Text) this.lookup("#ScoreValue")).setText(Integer.toString(player.getScore()));
             }
         }
     }

@@ -1,7 +1,7 @@
 package view;
 
 import Controller.BoardController;
-import Model.Plateau.Plateau;
+import Model.Board.Board;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -26,10 +26,10 @@ public class BoardView extends BorderPane implements EventHandler, Observer {
     private BoardController boardController;
 
 
-    public BoardView(BoardController boardController, Plateau plateau) {
+    public BoardView(BoardController boardController, Board board) {
         this.boardController = boardController;
 
-        plateau.addObserver(this);
+        board.addObserver(this);
 
         this.loadHomeView();
     }
