@@ -15,10 +15,10 @@ import javafx.scene.shape.Rectangle;
 import java.util.Observable;
 import java.util.Observer;
 
-public class GrilleView extends GridPane implements Observer{
+public class GridView extends GridPane implements Observer{
 
 
-    public GrilleView(Grille grille){
+    public GridView(Grille grille){
         this.generateGrid(grille);
         grille.addObserver(this);
     }

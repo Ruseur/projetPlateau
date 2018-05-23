@@ -43,9 +43,9 @@ public class BlokusView extends GameView{
         this.cleanView();
         this.setTop(this.getTopPane());
 
-        GrilleView grilleView = new GrilleView(blokus.getGrille());
-        grilleView.setAlignment(Pos.CENTER);
-        this.setCenter(grilleView);
+        GridView gridView = new GridView(blokus.getGrille());
+        gridView.setAlignment(Pos.CENTER);
+        this.setCenter(gridView);
 
         BorderPane rightPane = new BorderPane();
         rightPane.setTop(this.getInfoView(blokus));
@@ -185,9 +185,9 @@ public class BlokusView extends GameView{
         if(o instanceof Blokus) {
             Blokus blokus = (Blokus) o;
             if(arg.equals("PlayerGridUpdate") && blokus.getStatus().equals("playing")) {
-                GrilleView playerGrilleView = ((GrilleView) this.lookup("#PlayerGrilleView"));
-                playerGrilleView.getChildren().removeAll(playerGrilleView.getChildren());
-                playerGrilleView.generateGrid(blokus.getCurrentGridPlayer());
+                GridView playerGridView = ((GridView) this.lookup("#PlayerGrilleView"));
+                playerGridView.getChildren().removeAll(playerGridView.getChildren());
+                playerGridView.generateGrid(blokus.getCurrentGridPlayer());
             }
             if(arg.equals("PlayerPiecesUpdate") && blokus.getStatus().equals("playing")) {
                 FlowPane playerPiecesView = ((FlowPane) this.lookup("#PlayerPiecesView"));

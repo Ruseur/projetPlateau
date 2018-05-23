@@ -51,9 +51,9 @@ public class TetrisView extends GameView implements EventHandler<Event> {
         this.cleanView();
         this.setTop(this.getTopPane());
 
-        GrilleView grilleView = new GrilleView(tetris.getGrille());
-        grilleView.setAlignment(Pos.CENTER);
-        this.setCenter(grilleView);
+        GridView gridView = new GridView(tetris.getGrille());
+        gridView.setAlignment(Pos.CENTER);
+        this.setCenter(gridView);
 
         BorderPane rightPane = new BorderPane();
         rightPane.setTop(this.getInfoView(tetris));
@@ -239,7 +239,7 @@ public class TetrisView extends GameView implements EventHandler<Event> {
 
         if(tetris.getStatus().equals("playing") || tetris.getStatus().equals("paused")) {
             options.add(this.getScoreView(tetris));
-            options.add(new GrilleView(tetris.getNextPieceGrille()));
+            options.add(new GridView(tetris.getNextPieceGrille()));
             options.add(this.getLevelView(tetris));
         }
 
