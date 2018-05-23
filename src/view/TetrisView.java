@@ -136,19 +136,23 @@ public class TetrisView extends GameView implements EventHandler<Event> {
         gameControllerView.setAlignment(Pos.CENTER);
 
         Button playButton = new Button("Play");
+        playButton.setId("PlayButton");
         playButton.setMaxWidth(Double.MAX_VALUE);
         playButton.setOnMouseClicked(this);
         if(this.jeu.getJoueur() == null) playButton.setDisable(true);
 
         Button resumeButton = new Button("Resume");
+        resumeButton.setId("ResumeButton");
         resumeButton.setMaxWidth(Double.MAX_VALUE);
         resumeButton.setOnMouseClicked(this);
 
         Button pauseButton = new Button("Pause");
+        pauseButton.setId("PauseButton");
         pauseButton.setMaxWidth(Double.MAX_VALUE);
         pauseButton.setOnMouseClicked(this);
 
         Button resetButton = new Button("Reset");
+        resetButton.setId("ResetButton");
         resetButton.setMaxWidth(Double.MAX_VALUE);
         resetButton.setOnMouseClicked(this);
 
@@ -175,21 +179,25 @@ public class TetrisView extends GameView implements EventHandler<Event> {
         GridPane inGameControllerView = new GridPane();
 
         Button left = new Button("Left");
+        left.setId("LeftButton");
         left.setOnMouseClicked(this);
         left.setMaxWidth(Double.MAX_VALUE);
         inGameControllerView.add(left,0,1);
 
         Button right = new Button("Right");
+        right.setId("RightButton");
         right.setOnMouseClicked(this);
         right.setMaxWidth(Double.MAX_VALUE);
         inGameControllerView.add(right,2,1);
 
         Button up = new Button("Up");
+        up.setId("UpButton");
         up.setOnMouseClicked(this);
         up.setMaxWidth(Double.MAX_VALUE);
         inGameControllerView.add(up,1,0);
 
         Button down = new Button("Down");
+        down.setId("DownButton");
         down.setOnMouseClicked(this);
         down.setMaxWidth(Double.MAX_VALUE);
         inGameControllerView.add(down,1,1);
@@ -305,6 +313,7 @@ public class TetrisView extends GameView implements EventHandler<Event> {
         String action = "";
         if (event.getSource() instanceof Button) {
             action = ((Button) event.getSource()).getText();
+            if(action.equals("Play again")) action = "Play";
         }
         if (event instanceof KeyEvent) {
             switch (((KeyEvent) event).getCode()) {
