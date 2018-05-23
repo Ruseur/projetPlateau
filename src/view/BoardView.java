@@ -24,13 +24,11 @@ import java.util.Observer;
 public class BoardView extends BorderPane implements EventHandler, Observer {
 
     private BoardController boardController;
-    private Plateau plateau;
 
 
     public BoardView(BoardController boardController, Plateau plateau) {
         this.boardController = boardController;
 
-        this.plateau = plateau;
         plateau.addObserver(this);
 
         this.loadHomeView();

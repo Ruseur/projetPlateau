@@ -20,71 +20,67 @@ import java.util.Observable;
 
 public class BlokusView extends GameView{
 
-    private Blokus jeu;
     private BlokusController blokusController;
 
 
     public BlokusView(BlokusController blokusController, Blokus blokus) {
-        this.jeu = blokus;
         blokus.addObserver(this);
 
         this.blokusController = blokusController;
 
         this.setId("BlokusView");
-        this.loadHomeView();
+        this.loadHomeView(blokus);
     }
 
-    public void loadHomeView() {
+    private void loadHomeView(Blokus blokus) {
         this.cleanView();
         this.setTop(this.getTopPane());
-        this.setCenter(this.getGameControllerView());
+        this.setCenter(this.getGameControllerView(blokus));
     }
 
 
-    @Override
-    public void loadInGameView() {
+    private void loadInGameView(Blokus blokus) {
         this.cleanView();
         this.setTop(this.getTopPane());
 
-        GrilleView grilleView = new GrilleView(this.jeu.getGrille());
+        GrilleView grilleView = new GrilleView(blokus.getGrille());
         grilleView.setAlignment(Pos.CENTER);
         this.setCenter(grilleView);
 
         BorderPane rightPane = new BorderPane();
-        rightPane.setTop(this.getInfoView());
-        rightPane.setCenter(this.getGameControllerView());
+        rightPane.setTop(this.getInfoView(blokus));
+        rightPane.setCenter(this.getGameControllerView(blokus));
 
 
-        rightPane.setBottom(this.getPlayerPiecesView());
+        rightPane.setBottom(this.getPlayerPiecesView(blokus));
         this.setRight(rightPane);
     }
 
-    private Pane getPlayerPiecesView() {
+    private Pane getPlayerPiecesView(Blokus blokus) {
         FlowPane playerPiecesView = new FlowPane();
         playerPiecesView.setId("PlayerPiecesView");
 
         playerPiecesView.setHgap(8);
         playerPiecesView.setVgap(8);
-        playerPiecesView.getChildren().addAll(this.getCurrentPlayerPiecesView());
+        playerPiecesView.getChildren().addAll(this.getCurrentPlayerPiecesView(blokus));
         playerPiecesView.setAlignment(Pos.CENTER);
 
         return playerPiecesView;
     }
 
-    private ArrayList<PieceView> getCurrentPlayerPiecesView() {
+    private ArrayList<PieceView> getCurrentPlayerPiecesView(Blokus blokus) {
         ArrayList<PieceView> currentPlayerPiecesView = new ArrayList<>();
-        for(Piece piece : this.jeu.getCurrentPlayerPieces()) {
+        for(Piece piece : blokus.getCurrentPlayerPieces()) {
             currentPlayerPiecesView.add(new PieceView(piece));
         }
         return currentPlayerPiecesView;
     }
 
-    @Override
-    protected void loadFinishView() {
+    private void loadFinishView(Blokus blokus) {
         this.cleanView();
         this.setTop(this.getTopPane());
         this.setCenter(this.getBestScoresView());
-        this.setBottom(this.getGameControllerView());
+        this.setBottom(this.getGameControllerView(blokus));
     }
 
     private Pane getBestScoresView() {
@@ -92,7 +88,7 @@ public class BlokusView extends GameView{
         bestScoreView.setId("BestScoreView");
         bestScoreView.setAlignment(Pos.CENTER);
 
-        ArrayList<Integer> bestScores = new ArrayList<Integer>();
+        ArrayList<Integer> bestScores = new ArrayList<>();
 
         bestScores.add(10);
         bestScores.add(20);
@@ -105,7 +101,7 @@ public class BlokusView extends GameView{
         return bestScoreView;
     }
 
-    private Pane getGameControllerView() {
+    private Pane getGameControllerView(Blokus blokus) {
         VBox gameControllerView = new VBox();
         gameControllerView.setId("GameControllerView");
         gameControllerView.setAlignment(Pos.CENTER);
@@ -126,7 +122,7 @@ public class BlokusView extends GameView{
         resetButton.setMaxWidth(Double.MAX_VALUE);
         resetButton.setOnMouseClicked(this);
 
-        String gameStatus = this.jeu.getStatus();
+        String gameStatus = blokus.getStatus();
         switch (gameStatus) {
             case "playing":
                 gameControllerView.getChildren().addAll(nextButton,pauseButton,resetButton);
@@ -144,17 +140,8 @@ public class BlokusView extends GameView{
         return gameControllerView;
     }
 
-    private Pane getInGameControllerView() {
 
-        BorderPane inGameControllerView = new BorderPane();
-
-        this.setCenter(new GrilleView(this.jeu.getCurrentGridPlayer()));
-
-        return inGameControllerView;
-    }
-
-
-    private VBox getInfoView() {
+    private VBox getInfoView(Blokus blokus) {
         VBox vbox = new VBox();
         vbox.setId("InfoView");
         vbox.setPadding(new Insets(10));
@@ -165,7 +152,7 @@ public class BlokusView extends GameView{
         vbox.getChildren().add(title);
 
         VBox playersView = new VBox();
-        for(Joueur player : this.jeu.getPlayers()) {
+        for(Joueur player : blokus.getPlayers()) {
             playersView.getChildren().add(new PlayerView(player));
         }
         VBox.setMargin(playersView, new Insets(0, 0, 0, 8));
@@ -196,27 +183,28 @@ public class BlokusView extends GameView{
     @Override
     public void update(Observable o, Object arg) {
         if(o instanceof Blokus) {
-            if(arg.equals("PlayerGridUpdate") && this.jeu.getStatus().equals("playing")) {
+            Blokus blokus = (Blokus) o;
+            if(arg.equals("PlayerGridUpdate") && blokus.getStatus().equals("playing")) {
                 GrilleView playerGrilleView = ((GrilleView) this.lookup("#PlayerGrilleView"));
                 playerGrilleView.getChildren().removeAll(playerGrilleView.getChildren());
-                playerGrilleView.generateGrid(this.jeu.getCurrentGridPlayer());
+                playerGrilleView.generateGrid(blokus.getCurrentGridPlayer());
             }
-            if(arg.equals("PlayerPiecesUpdate") && this.jeu.getStatus().equals("playing")) {
+            if(arg.equals("PlayerPiecesUpdate") && blokus.getStatus().equals("playing")) {
                 FlowPane playerPiecesView = ((FlowPane) this.lookup("#PlayerPiecesView"));
                 playerPiecesView.getChildren().removeAll(playerPiecesView.getChildren());
-                playerPiecesView.getChildren().addAll(this.getCurrentPlayerPiecesView());
+                playerPiecesView.getChildren().addAll(this.getCurrentPlayerPiecesView(blokus));
             }
 
             if(arg.equals("StatusUpdate")) {
-                switch (this.jeu.getStatus()) {
+                switch (blokus.getStatus()) {
                     case "playing":
-                        this.loadInGameView();
+                        this.loadInGameView(blokus);
                         break;
                     case "finished":
-                        this.loadFinishView();
+                        this.loadFinishView(blokus);
                         break;
                     default:
-                        this.loadHomeView();
+                        this.loadHomeView(blokus);
                         break;
                 }
             }

@@ -22,66 +22,61 @@ import java.util.Observable;
 
 public class TetrisView extends GameView implements EventHandler<Event> {
 
-    private Tetris jeu;
     private TetrisController tetrisController;
 
 
     public TetrisView(TetrisController tetrisController, Tetris tetris) {
-        this.jeu = tetris;
         tetris.addObserver(this);
 
         this.tetrisController = tetrisController;
 
         this.setId("TetrisView");
-        this.loadHomeView();
+        this.loadHomeView(tetris);
 
         this.setOnKeyPressed(this);
     }
 
-    public void loadHomeView() {
+    private void loadHomeView(Tetris tetris) {
         this.cleanView();
         this.setTop(this.getTopPane());
 
         VBox body = new VBox();
-        body.getChildren().addAll(this.getPlayerView(), this.getBestScoresView());
+        body.getChildren().addAll(this.getPlayerView(tetris), this.getBestScoresView());
 
         this.setCenter(body);
-        this.setBottom(this.getGameControllerView());
+        this.setBottom(this.getGameControllerView(tetris));
     }
 
-
-    @Override
-    public void loadInGameView() {
+    private void loadInGameView(Tetris tetris) {
         this.cleanView();
         this.setTop(this.getTopPane());
 
-        GrilleView grilleView = new GrilleView(this.jeu.getGrille());
+        GrilleView grilleView = new GrilleView(tetris.getGrille());
         grilleView.setAlignment(Pos.CENTER);
         this.setCenter(grilleView);
 
         BorderPane rightPane = new BorderPane();
-        rightPane.setTop(this.getInfoView());
-        rightPane.setCenter(this.getGameControllerView());
+        rightPane.setTop(this.getInfoView(tetris));
+        rightPane.setCenter(this.getGameControllerView(tetris));
         rightPane.setBottom(this.getInGameControllerView());
         this.setRight(rightPane);
     }
 
-    @Override
-    protected void loadFinishView() {
+    private void loadFinishView(Tetris tetris) {
         this.cleanView();
         this.setTop(this.getTopPane());
         this.setCenter(this.getBestScoresView());
-        this.setBottom(this.getGameControllerView());
+        this.setBottom(this.getGameControllerView(tetris));
     }
 
-    private Pane getPlayerView() {
+    private Pane getPlayerView(Tetris tetris) {
         VBox playerView = new VBox();
         playerView.setPadding(new Insets(10));
         playerView.setSpacing(8);
         playerView.setAlignment(Pos.CENTER);
 
-        if(this.jeu.getJoueur() != null) {
-            Text title = new Text("Hello "+ this.jeu.getJoueur().getNom()+" !");
+        if(tetris.getJoueur() != null) {
+            Text title = new Text("Hello "+ tetris.getJoueur().getNom()+" !");
             title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
             playerView.getChildren().add(title);
         } else {
@@ -130,7 +125,7 @@ public class TetrisView extends GameView implements EventHandler<Event> {
         return bestScoreView;
     }
 
-    private Pane getGameControllerView() {
+    private Pane getGameControllerView(Tetris tetris) {
         VBox gameControllerView = new VBox();
         gameControllerView.setId("GameControllerView");
         gameControllerView.setAlignment(Pos.CENTER);
@@ -139,7 +134,7 @@ public class TetrisView extends GameView implements EventHandler<Event> {
         playButton.setId("PlayButton");
         playButton.setMaxWidth(Double.MAX_VALUE);
         playButton.setOnMouseClicked(this);
-        if(this.jeu.getJoueur() == null) playButton.setDisable(true);
+        if(tetris.getJoueur() == null) playButton.setDisable(true);
 
         Button resumeButton = new Button("Resume");
         resumeButton.setId("ResumeButton");
@@ -156,7 +151,7 @@ public class TetrisView extends GameView implements EventHandler<Event> {
         resetButton.setMaxWidth(Double.MAX_VALUE);
         resetButton.setOnMouseClicked(this);
 
-        String gameStatus = this.jeu.getStatus();
+        String gameStatus = tetris.getStatus();
         switch (gameStatus) {
             case "playing":
                 gameControllerView.getChildren().addAll(pauseButton,resetButton);
@@ -207,22 +202,22 @@ public class TetrisView extends GameView implements EventHandler<Event> {
         return inGameControllerView;
     }
 
-    private Pane getScoreView() {
-        this.jeu.getJoueur().addObserver(this);
+    private Pane getScoreView(Tetris tetris) {
+        tetris.getJoueur().addObserver(this);
 
         GridPane scoreView = new GridPane();
         scoreView.setId("ScoreView");
-        Text scoreValue = new Text(Integer.toString(this.jeu.getJoueur().getScore()));
+        Text scoreValue = new Text(Integer.toString(tetris.getJoueur().getScore()));
         scoreValue.setId("ScoreValue");
         scoreView.add(new Text("Score: "),0,0);
         scoreView.add(scoreValue,1,0);
         return scoreView;
     }
 
-    private Pane getLevelView() {
+    private Pane getLevelView(Tetris tetris) {
         GridPane levelView = new GridPane();
         levelView.setId("LevelView");
-        Text levelValue = new Text(Integer.toString(this.jeu.getLevel()));
+        Text levelValue = new Text(Integer.toString(tetris.getLevel()));
         levelValue.setId("LevelValue");
         levelView.add(new Text("Niveau: "),0,0);
         levelView.add(levelValue,1,0);
@@ -230,7 +225,7 @@ public class TetrisView extends GameView implements EventHandler<Event> {
     }
 
 
-    private VBox getInfoView() {
+    private VBox getInfoView(Tetris tetris) {
         VBox vbox = new VBox();
         vbox.setId("InfoView");
         vbox.setPadding(new Insets(10));
@@ -240,12 +235,12 @@ public class TetrisView extends GameView implements EventHandler<Event> {
         title.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         vbox.getChildren().add(title);
 
-        ArrayList<Pane> options = new ArrayList<Pane>();
+        ArrayList<Pane> options = new ArrayList<>();
 
-        if(this.jeu.getStatus().equals("playing") || this.jeu.getStatus().equals("paused")) {
-            options.add(this.getScoreView());
-            options.add(new GrilleView(this.jeu.getNextPieceGrille()));
-            options.add(this.getLevelView());
+        if(tetris.getStatus().equals("playing") || tetris.getStatus().equals("paused")) {
+            options.add(this.getScoreView(tetris));
+            options.add(new GrilleView(tetris.getNextPieceGrille()));
+            options.add(this.getLevelView(tetris));
         }
 
         for (Pane option : options) {
@@ -276,34 +271,36 @@ public class TetrisView extends GameView implements EventHandler<Event> {
     @Override
     public void update(Observable o, Object arg) {
         if(o instanceof Tetris) {
-            if(arg.equals("LevelUpdate") && this.jeu.getStatus().equals("playing")) {
-                ((Text)this.lookup("#LevelValue")).setText(Integer.toString(this.jeu.getLevel()));
+            Tetris tetris = (Tetris) o;
+            if(arg.equals("LevelUpdate") && tetris.getStatus().equals("playing")) {
+                ((Text)this.lookup("#LevelValue")).setText(Integer.toString(tetris.getLevel()));
             }
             if(arg.equals("PlayerUpdate")) {
-                this.loadHomeView();
+                this.loadHomeView(tetris);
             }
 
             if(arg.equals("StatusUpdate")) {
-                switch (this.jeu.getStatus()) {
+                switch (tetris.getStatus()) {
                     case "playing":
-                        this.loadInGameView();
+                        this.loadInGameView(tetris);
                         break;
                     case "paused":
-                        this.loadInGameView();
+                        this.loadInGameView(tetris);
                         break;
                     case "finished":
-                        this.loadFinishView();
+                        this.loadFinishView(tetris);
                         break;
                     default:
-                        this.loadHomeView();
+                        this.loadHomeView(tetris);
                         break;
                 }
             }
         }
 
         if(o instanceof Joueur) {
-            if(arg.equals("ScoreUpdate") && this.jeu.getStatus().equals("playing")) {
-                ((Text) this.lookup("#ScoreValue")).setText(Integer.toString(this.jeu.getJoueur().getScore()));
+            Joueur joueur = (Joueur) o;
+            if(arg.equals("ScoreUpdate")) {
+                ((Text) this.lookup("#ScoreValue")).setText(Integer.toString(joueur.getScore()));
             }
         }
     }
