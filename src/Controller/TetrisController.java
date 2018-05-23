@@ -18,12 +18,10 @@ public class TetrisController extends GameController {
 
     private Tetris jeu;
     private Piece currentPiece;
-    private Grille grille;
     private Piece nextPiece;
     private boolean perdu;
     private Timer timer;
 
-    private int currentLevel;
     private int nbPieceLevel;
 
 
@@ -34,7 +32,6 @@ public class TetrisController extends GameController {
         Tetris tetris = new Tetris(grille);
         this.jeu = tetris;
         this.perdu = false;
-        this.grille = grille;
 
         this.jeu.setNextPieceGrille(new Grille(5,4));
 
@@ -52,7 +49,7 @@ public class TetrisController extends GameController {
 
         this.majNextPiece();
 
-        this.currentPiece.setGrille(this.grille);
+        this.currentPiece.setGrille(this.jeu.getGrille());
 
         this.currentPiece.placement(0, 4);
 
@@ -83,7 +80,7 @@ public class TetrisController extends GameController {
             this.majNextPiece();
 
 
-            this.currentPiece.setGrille(this.grille);
+            this.currentPiece.setGrille(this.jeu.getGrille());
 
             if(!this.currentPiece.placement(0, 3)){
                 this.perdu = true;
@@ -93,7 +90,7 @@ public class TetrisController extends GameController {
             }
         }
 
-        /*for(Case[] ligne : this.grille.getGrilleCase()){
+        /*for(Case[] ligne : this.jeu.getGrille().getGrilleCase()){
             for(Case c: ligne){
                 int id=0;
                     if(c.getPiece() !=null){
@@ -147,7 +144,7 @@ public class TetrisController extends GameController {
     }
 
     public void suppressionLigne() {
-        int nbLignesSuppr = this.grille.suppressionLigne();
+        int nbLignesSuppr = this.jeu.getGrille().suppressionLigne();
         if(nbLignesSuppr != 0){
             int points = (int) (10* Math.pow(nbLignesSuppr, 2));
             this.jeu.getJoueur().setScore(this.jeu.getJoueur().getScore()+points);
@@ -165,7 +162,7 @@ public class TetrisController extends GameController {
     public void reset(){
 
         //Grille grille = new Grille(10,20);
-        this.grille.clear();
+        this.jeu.getGrille().clear();
         this.perdu = false;
 
         if(this.jeu.getJoueur() != null)
