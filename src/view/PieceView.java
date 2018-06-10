@@ -1,6 +1,6 @@
 package view;
 
-import Model.Plateau.Piece;
+import Model.Board.Piece;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -12,13 +12,13 @@ public class PieceView extends GridPane implements Observer {
     public PieceView(Piece piece) {
         int[][] disposition = piece.getDisposition();
 
-        int indexColonne = 0;
-        int indexLigne = 0;
+        int columnIndex = 0;
+        int rowIndex = 0;
 
         for(int[] colonne : disposition) {
 
 
-            indexLigne = 0;
+            rowIndex = 0;
             for(int ligne : colonne) {
                 if(ligne == 1) {
                     Rectangle rec = new Rectangle();
@@ -27,11 +27,11 @@ public class PieceView extends GridPane implements Observer {
                     rec.setFill(piece.getColor());
                     rec.setStrokeWidth(0.1);
                     rec.setStroke(Color.WHITE);
-                    this.add(rec, indexColonne, indexLigne);
+                    this.add(rec, columnIndex, rowIndex);
                 }
-                indexLigne++;
+                rowIndex++;
             }
-            indexColonne++;
+            columnIndex++;
         }
 
 

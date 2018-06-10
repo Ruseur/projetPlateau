@@ -1,7 +1,7 @@
 package view;
 
 import Controller.BoardController;
-import Model.Plateau.Plateau;
+import Model.Board.Board;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -24,14 +24,12 @@ import java.util.Observer;
 public class BoardView extends BorderPane implements EventHandler, Observer {
 
     private BoardController boardController;
-    private Plateau plateau;
 
 
-    public BoardView(BoardController boardController, Plateau plateau) {
+    public BoardView(BoardController boardController, Board board) {
         this.boardController = boardController;
 
-        this.plateau = plateau;
-        plateau.addObserver(this);
+        board.addObserver(this);
 
         this.loadHomeView();
     }
@@ -104,13 +102,13 @@ public class BoardView extends BorderPane implements EventHandler, Observer {
                     Platform.exit();
                     break;
                 case "Tetris":
-                    this.boardController.changeGame("Tetris");
+                    this.boardController.switchGame("Tetris");
                     break;
                 case "Blokus":
-                    this.boardController.changeGame("Blokus");
+                    this.boardController.switchGame("Blokus");
                     break;
                 case "Puzzle":
-                    this.boardController.changeGame("Puzzle");
+                    this.boardController.switchGame("Puzzle");
                     break;
             }
         }

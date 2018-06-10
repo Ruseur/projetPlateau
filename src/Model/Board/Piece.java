@@ -1,4 +1,4 @@
-package Model.Plateau;
+package Model.Board;
 
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.Observable;
 public class Piece extends Observable {
 
     private int id;
-    private Grille grille;
+    private Grid grid;
     private int[][] disposition;
     private ArrayList<Case> listCase;
     private Color color;
@@ -24,7 +24,7 @@ public class Piece extends Observable {
 
     public Piece(int id, int[][] disposition, Color color) {
 
-        this.grille = null;
+        this.grid = null;
         this.id = id;
 
         this.disposition = disposition;
@@ -41,7 +41,7 @@ public class Piece extends Observable {
 
     public void updatePiece(){
         for(Case c: this.listCase){
-            this.grille.updateCase(c);
+            this.grid.updateCase(c);
         }
     }
 
@@ -51,58 +51,49 @@ public class Piece extends Observable {
         return listCase;
     }
 
-    public void afficherDisposition() {
-        for (int[] ligne : disposition) {
-            for (int i : ligne) {
-                System.out.print(i + " | ");
-            }
-            System.out.println();
-        }
-    }
-
-    //après construction, la pièce va être placée sur la grille de plateau
+    //après construction, la pièce va être placée sur la grid de board
     //v1 => on construit la pièce avec comme point d'origine dans sa disposition en haut à gauche TODO
-    public boolean placement(int yOrig, int xOrig) {
+    public boolean place(int yOrig, int xOrig) {
 
-        boolean placementReussi = true;
+        boolean placed = true;
         int y = 0;
         int x;
         ArrayList<Case> newListCase = new ArrayList<>();
 
-            while (y < this.disposition.length && placementReussi) {
+            while (y < this.disposition.length && placed) {
                 x = 0;
-                while (x < disposition[0].length && placementReussi) {
+                while (x < disposition[0].length && placed) {
                     if (disposition[y][x] == 1) {
-                        Case c = this.grille.getCase(yOrig + y, xOrig + x);
+                        Case c = this.grid.getCase(yOrig + y, xOrig + x);
                         if (c != null) {
-                            placementReussi = c.setPiece(this);
+                            placed = c.setPiece(this);
                             newListCase.add(c);
                         } else {
-                            placementReussi = false;
+                            placed = false;
                         }
                     }
                     x++;
                 }
                 y++;
             }
-        if (placementReussi) { //la piece a pu se placer en entier.
-            //desattribution de toutes les cases qui ne sont pas en commun
-            /*ArrayList<Case> saveAncienneCase = this.anciennesCase(this.getListCase(), newListCase);
-            this.desattribution(saveAncienneCase);
+        if (placed) { //la piece a pu se placer en entier.
+            //removePieces de toutes les cases qui ne sont pas en commun
+            /*ArrayList<Case> saveAncienneCase = this.oldCases(this.getListCase(), newListCase);
+            this.removePieces(saveAncienneCase);
             this.listCase = newListCase;
-            majBornes();
-            //grille.addPiece(this); //TODO attention lors de la rotation plusieurs ajouts sont possible a modifier
+            updateLandmarks();
+            //grid.addPiece(this); //TODO attention lors de la rotation plusieurs ajouts sont possible a modifier
             this.updatePiece();*/
 
-            this.desattribution(this.anciennesCase(this.getListCase(), newListCase));
+            this.removePieces(this.oldCases(this.getListCase(), newListCase));
             this.listCase = newListCase;
-            majBornes();
+            updateLandmarks();
             this.updatePiece();
         } else { //la piece n'a pas pu se placer en entier on libère les pièces
-            this.desattribution(this.anciennesCase(newListCase, this.listCase));
+            this.removePieces(this.oldCases(newListCase, this.listCase));
             /*System.out.println("Pièce n'a pas pu être placée");*/
         }
-        return placementReussi;
+        return placed;
     }
 
 
@@ -114,7 +105,7 @@ public class Piece extends Observable {
         int i = 0;
         while (i < nbCases && placementReussi) {
             //on récupère la case d'en dessous et on se l'attribue
-            Case c = this.grille.getCase(this.getListCase().get(i).getY() - y, this.getListCase().get(i).getX() + x);
+            Case c = this.grid.getCase(this.getListCase().get(i).getY() - y, this.getListCase().get(i).getX() + x);
             if (c != null) {
                 /*System.out.println("Case trouvée y:" + c.getY() + " x:"+c.getX());*/
                 placementReussi = c.setPiece(this);
@@ -125,45 +116,45 @@ public class Piece extends Observable {
             i++;
         }
         if (placementReussi) {
-            this.desattribution(this.anciennesCase(this.getListCase(), newCases));
+            this.removePieces(this.oldCases(this.getListCase(), newCases));
             this.listCase = newCases;
-            majBornes();
+            updateLandmarks();
             this.updatePiece();
             return true;
         } else {
-            this.desattribution(this.anciennesCase(newCases, this.listCase));
+            this.removePieces(this.oldCases(newCases, this.listCase));
             /*System.out.println("La pièce n'a pas pu être translatée");*/
             return false;
         }
     }
 
     public boolean testPlacement(int yOrig, int xOrig) {
-        while(!placement(yOrig++,xOrig++)) {
+        while(!place(yOrig++,xOrig++)) {
             yOrig = yOrig+2;
         }
         return true;
     }
 
-    public boolean rotationHoraire() {
+    public boolean clockwiseRotation() {
         //transformation de la disposition
-        int largeurDispo = this.disposition[0].length;
-        int hauteurDispo = this.disposition.length;
+        int widthDisposition = this.disposition[0].length;
+        int heightDisposition = this.disposition.length;
 
-        int[][] newDispo = new int[largeurDispo][hauteurDispo]; //inversion hauteur largeur
+        int[][] newDisposition = new int[widthDisposition][heightDisposition]; //inversion hauteur largeur
         for (int y = 0; y < this.disposition.length; y++) {
             for (int x = 0; x < this.disposition[0].length; x++) {
-                newDispo[x][newDispo[0].length - 1 - y] = this.disposition[y][x];
+                newDisposition[x][newDisposition[0].length - 1 - y] = this.disposition[y][x];
             }
         }
 
-        int[][] ancienneDispo = this.disposition;
-        this.disposition = newDispo; //nouvelle dispo necessaire au test de placement de la pièce
+        int[][] oldDisposition = this.disposition;
+        this.disposition = newDisposition; //nouvelle dispo necessaire au test de place de la pièce
 
 
-        if (placement(this.minY, this.minX)) {
+        if (place(this.minY, this.minX)) {
             return true;
         } else {
-            this.disposition = ancienneDispo; //rollback à l'ancienne dispo
+            this.disposition = oldDisposition; //rollback à l'ancienne dispo
             return false;
         }
     }
@@ -172,11 +163,11 @@ public class Piece extends Observable {
         return false;
     }
 
-    public boolean suppressionPartielle() {
+    public boolean partialDelete() {
         return false;
     }
 
-    private void majBornes() {
+    private void updateLandmarks() {
         this.minX = this.listCase.get(0).getX();
         this.minY = this.listCase.get(0).getY();
         for (Case c : this.listCase) {
@@ -217,16 +208,16 @@ public class Piece extends Observable {
         return maxY;
     }
 
-    private void desattribution(ArrayList<Case> listCase) {
+    private void removePieces(ArrayList<Case> listCase) {
         for (Case c : listCase) {
             if(c.getPiece().getId() == this.getId()){
                 c.raz();
-                this.grille.updateCase(c);
+                this.grid.updateCase(c);
             }
         }
     }
 
-    public ArrayList<Case> anciennesCase(ArrayList<Case> ancienneListe, ArrayList<Case> nouvelleListe) {
+    private ArrayList<Case> oldCases(ArrayList<Case> ancienneListe, ArrayList<Case> nouvelleListe) {
         // Prepare an intersection
         ArrayList<Case> intersection = new ArrayList<>(ancienneListe);
         intersection.retainAll(nouvelleListe);
@@ -236,8 +227,8 @@ public class Piece extends Observable {
         return ancienneListe;
     }
 
-    public void setGrille(Grille grille) {
-        this.grille = grille;
+    public void setGrid(Grid grid) {
+        this.grid = grid;
     }
 
     public Color getColor() {

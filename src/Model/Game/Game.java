@@ -1,20 +1,20 @@
-package Model.Jeu;
+package Model.Game;
 
-import Model.Plateau.Grille;
+import Model.Board.Grid;
 
 import java.util.Observable;
 
-public class Jeu extends Observable {
+public class Game extends Observable {
     // "playing" "paused" "initial" "finished"
     private String status = "initial";
-    private Grille grille;
+    private Grid grid;
 
-    public Grille getGrille() {
-        return grille;
+    public Grid getGrid() {
+        return grid;
     }
 
-    public void setGrille(Grille grille) {
-        this.grille = grille;
+    public void setGrid(Grid grid) {
+        this.grid = grid;
     }
 
     public String getStatus() {

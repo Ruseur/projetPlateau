@@ -1,26 +1,26 @@
-package Model.Jeu;
+package Model.Game;
 
-import Model.Joueur.Joueur;
-import Model.Plateau.Grille;
-import Model.Plateau.Piece;
+import Model.Board.Grid;
+import Model.Player.Player;
+import Model.Board.Piece;
 
 import java.util.ArrayList;
 
-public class Blokus extends Jeu {
+public class Blokus extends Game {
 
-    private ArrayList<Joueur> players;
+    private ArrayList<Player> players;
     private ArrayList<Piece> pieces;
     private ArrayList<ArrayList<Piece>> playersPieces;
-    private Joueur currentPlayer;
+    private Player currentPlayer;
     private ArrayList<Piece> currentPlayerPieces;
-    private Grille currentGridPlayer;
+    private Grid currentGridPlayer;
 
-    public Blokus(Grille grille) {
-        this.setPlayers(new ArrayList<Joueur>());
-        this.setGrille(grille);
+    public Blokus(Grid grid) {
+        this.setPlayers(new ArrayList<Player>());
+        this.setGrid(grid);
     }
 
-    public Joueur getCurrentPlayer() {
+    public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
@@ -35,24 +35,24 @@ public class Blokus extends Jeu {
         return nextIndex;
     }
 
-    public Joueur getNextPlayer() {
+    public Player getNextPlayer() {
         Integer nextIndex = this.getNextPlayerIndex();
         return this.players.get(nextIndex);
     }
 
-    public void setCurrentPlayer(Joueur currentPlayer) {
+    public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
-    public ArrayList<Joueur> getPlayers() {
+    public ArrayList<Player> getPlayers() {
         return players;
     }
 
-    public void addPlayer(Joueur player) {
+    public void addPlayer(Player player) {
         this.players.add(player);
     }
 
-    public void setPlayers(ArrayList<Joueur> players) {
+    public void setPlayers(ArrayList<Player> players) {
         this.players = players;
     }
 
@@ -68,11 +68,11 @@ public class Blokus extends Jeu {
         this.pieces = pieces;
     }
 
-    public Grille getCurrentGridPlayer() {
+    public Grid getCurrentGridPlayer() {
         return currentGridPlayer;
     }
 
-    public void setCurrentGridPlayer(Grille currentGridPlayer) {
+    public void setCurrentGridPlayer(Grid currentGridPlayer) {
         this.currentGridPlayer = currentGridPlayer;
         setChanged();
         notifyObservers("PlayerGridUpdate");

@@ -5,24 +5,24 @@
  */
 package Controller;
 
-import Model.Jeu.Jeu;
-import Model.Plateau.Plateau;
+import Model.Board.Board;
+import Model.Game.Game;
 import view.GameView;
 
 public abstract class GameController{
-    protected Plateau plateau;
+    protected Board board;
     GameView gameView;
-    private Jeu jeu;
+    private Game game;
 
-    GameController(Plateau plateau) {
-        this.plateau = plateau;
+    GameController(Board board) {
+        this.board = board;
     }
 
     GameView getGameView() {
         return this.gameView;
     }
 
-    Jeu getJeu(){return jeu;}
+    Game getGame(){return game;}
 
     public abstract void reset();
 }

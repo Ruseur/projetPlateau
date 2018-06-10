@@ -1,30 +1,30 @@
-package Model.Joueur;
+package Model.Player;
 
 import javafx.scene.paint.Color;
 
 import java.util.Observable;
 
-public class Joueur extends Observable {
-    private String nom;
+public class Player extends Observable {
+    private String name;
     private int score = 0;
     private String status = "playing";
     private Color color;
 
-    public Joueur(String nom){
-        this.setNom(nom);
+    public Player(String name){
+        this.setName(name);
     }
 
-    public Joueur(String nom, Color color){
-        this.setNom(nom);
+    public Player(String name, Color color){
+        this.setName(name);
         this.setColor(color);
     }
 
-    public String getNom() {
-        return nom;
+    public String getName() {
+        return name;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getScore() {

@@ -1,31 +1,31 @@
 package Controller;
 
-import Model.Plateau.Plateau;
+import Model.Board.Board;
 import view.BoardView;
 import view.DefaultView;
 
 public class BoardController {
     private BoardView boardView;
     private GameController gameController;
-    private Plateau plateau;
+    private Board board;
 
     public BoardController() {
-        this.plateau = new Plateau();
-        this.boardView = new BoardView(this, this.plateau);
+        this.board = new Board();
+        this.boardView = new BoardView(this, this.board);
     }
 
-    public void changeGame(String gameName){
+    public void switchGame(String gameName){
         if(this.gameController != null)
             this.gameController.reset();
         switch (gameName) {
             case "Tetris":
-                this.gameController = new TetrisController(this.plateau);
-                this.plateau.setJeu(gameController.getJeu());
+                this.gameController = new TetrisController(this.board);
+                this.board.setGame(gameController.getGame());
                 this.boardView.setBody(gameController.getGameView());
                 break;
             case "Blokus":
-                this.gameController = new BlokusController(this.plateau);
-                this.plateau.setJeu(gameController.getJeu());
+                this.gameController = new BlokusController(this.board);
+                this.board.setGame(gameController.getGame());
                 this.boardView.setBody(gameController.getGameView());
                 break;
             default:
